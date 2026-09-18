@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BidLens — Scorecard &amp; Rubric</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = { darkMode: "class", theme: { extend: { fontFamily: { sans: ["Inter","sans-serif"], headline: ["Plus Jakarta Sans","sans-serif"], mono: ["JetBrains Mono","monospace"] } } } }
+  </script>
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body class="bg-zinc-50 font-sans text-zinc-900 antialiased selection:bg-zinc-200">
+
+<!-- LEFT NAVIGATION BAR -->
+<aside class="fixed left-0 top-0 h-full w-72 bg-white z-50 flex-col border-r border-zinc-200 overflow-y-auto hidden lg:flex no-print">
+  <div class="h-16 px-6 flex items-center gap-3 border-b border-zinc-100 shrink-0">
+    <a href="index.html" class="w-7 h-7 rounded-full bg-zinc-950 text-white flex items-center justify-center font-bold text-sm tracking-tight shadow-sm shrink-0 font-headline">B</a>
+    <span class="font-headline font-bold text-zinc-950 text-sm tracking-tight">BidLens</span>
+  </div>
+
+  <div class="p-4 border-b border-zinc-100">
+    <a href="build.html" class="p-3 rounded-lg bg-zinc-50 border border-zinc-100 hover:border-zinc-200 flex flex-col gap-1 transition-colors group">
+      <div class="flex items-center justify-between text-[10px] uppercase font-semibold tracking-wider text-zinc-400">
+        <span>Active RFP</span><span class="material-symbols-outlined text-[13px] group-hover:text-zinc-600">unfold_more</span>
+      </div>
+      <div id="sb-rfp" class="text-xs font-semibold text-zinc-900 truncate">—</div>
+      <div id="sb-proposal" class="text-[11px] text-zinc-500 truncate">—</div>
+    </a>
+  </div>
+
+  <div class="p-4 border-b border-zinc-100 bg-zinc-50/50">
+    <div class="flex items-center justify-between mb-2">
+      <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded bg-zinc-900 text-white uppercase tracking-wider"><span class="material-symbols-outlined text-[11px] text-zinc-300">lock</span>Baseline RFP</span>
+      <span class="text-[10px] font-mono text-zinc-400 uppercase tracking-wide">Ground Truth</span>
+    </div>
+    <div class="p-2.5 rounded-lg bg-white border border-zinc-200 shadow-sm flex items-center justify-between gap-2.5">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-8 h-8 rounded-md bg-zinc-100 text-zinc-800 flex items-center justify-center shrink-0 border border-zinc-200"><span class="material-symbols-outlined text-[17px]">description</span></div>
+        <div class="min-w-0 flex-1"><div id="sb-rfpfile" class="font-mono font-bold text-xs text-zinc-950 truncate">—</div><div id="sb-client" class="text-[10px] text-zinc-500 truncate">—</div></div>
+      </div>
+      <button id="btn-inspect" class="p-1 rounded text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 transition-colors shrink-0 flex items-center justify-center" title="Inspect spec" type="button"><span class="material-symbols-outlined text-[15px]">more_horiz</span></button>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="p-4 border-b border-zinc-100">
+    <div class="flex items-center justify-between mb-2.5 px-1">
+      <span class="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider">History</span>
+      <span id="hist-count" class="text-[10px] font-mono text-zinc-400"></span>
+    </div>
+    <div id="history" class="flex flex-col gap-1"></div>
+    <a href="build.html" class="w-full mt-1.5 px-3 py-2 rounded-md border border-dashed border-zinc-300 hover:border-zinc-400 bg-zinc-50/50 hover:bg-zinc-100 text-zinc-600 hover:text-zinc-900 transition-colors flex items-center justify-center gap-1.5 text-xs font-medium group cursor-pointer">
+      <span class="material-symbols-outlined text-[15px] text-zinc-400 group-hover:text-zinc-700 transition-colors">add</span>New evaluation
+    </a>
+  </div>
+
+  <div class="flex-1 overflow-y-auto p-4">
+    <div class="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-2.5 px-1">Workspace</div>
+    <nav class="flex flex-col gap-1">
+      <a data-nav href="#scorecard" class="px-3 py-2 flex items-center bg-zinc-100 text-zinc-950 font-semibold rounded-md text-xs transition-colors"><span class="material-symbols-outlined mr-2.5 text-[17px] text-zinc-900">assignment_turned_in</span>Scorecard &amp; Rubric</a>
+      <a data-nav href="#auditor" class="px-3 py-2 rounded-md text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors flex items-center text-xs group"><span class="material-symbols-outlined mr-2.5 text-[17px] text-zinc-400 group-hover:text-zinc-700 transition-colors">splitscreen</span>Dual-Pane Review</a>
+      <a data-nav href="#verdict-card" class="px-3 py-2 rounded-md text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors flex items-center text-xs group"><span class="material-symbols-outlined mr-2.5 text-[17px] text-zinc-400 group-hover:text-zinc-700 transition-colors">gavel</span>Verdict &amp; Fixes</a>
+      <a data-nav href="#matrix" class="px-3 py-2 rounded-md text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors flex items-center text-xs group"><span class="material-symbols-outlined mr-2.5 text-[17px] text-zinc-400 group-hover:text-zinc-700 transition-colors">grid_view</span>Requirements Matrix</a>
+      <a data-nav href="#benchmark" class="px-3 py-2 rounded-md text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors flex items-center text-xs group"><span class="material-symbols-outlined mr-2.5 text-[17px] text-zinc-400 group-hover:text-zinc-700 transition-colors">assessment</span>Benchmark Engine</a>
+    </nav>
+  </div>
+
+  <div class="p-4 border-t border-zinc-100 bg-white shrink-0">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-full bg-zinc-100 text-zinc-700 flex items-center justify-center shrink-0 border border-zinc-200"><span class="material-symbols-outlined text-[16px]">person</span></div>
+      <div class="flex flex-col min-w-0 flex-1">
+        <span id="sb-user" class="text-xs font-semibold text-zinc-950 truncate">—</span>
+        <span id="sb-role" class="text-[11px] text-zinc-400 truncate">Lead Presales · DACH</span>
+      </div>
+      <a href="index.html" id="logout" class="text-zinc-300 hover:text-zinc-700 transition-colors" title="Exit session"><span class="material-symbols-outlined text-[17px]">logout</span></a>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN WORKSPACE -->
+<div class="lg:pl-72">
+  <header class="fixed top-0 left-0 lg:left-72 right-0 z-40 bg-white/95 backdrop-blur border-b border-zinc-200 no-print">
+    <div class="h-16 w-full px-5 sm:px-8 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <a href="index.html" class="lg:hidden w-7 h-7 rounded-full bg-zinc-950 text-white flex items-center justify-center font-bold text-xs font-headline shrink-0">B</a>
+        <span id="hd-client" class="text-xs font-medium text-zinc-900 truncate">—</span>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-100 text-zinc-600 text-[11px] font-medium">
+          <span id="mode-dot" class="w-1.5 h-1.5 rounded-full bg-zinc-400"></span><span id="mode-text">AI Evaluator</span>
+        </div>
+        <button id="btn-reset" class="px-2.5 py-1.5 rounded-md border border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-700 text-xs font-medium inline-flex items-center gap-1.5 transition-colors" type="button" title="Undo every applied fix and restore the original draft">
+          <span class="material-symbols-outlined text-[15px]">restart_alt</span><span class="hidden sm:inline">Reset</span>
+        </button>
+        <button id="btn-export" class="bg-zinc-900 hover:bg-zinc-800 text-white px-3.5 py-1.5 rounded-md text-xs font-medium inline-flex items-center gap-1.5 transition-colors shadow-sm" type="button">
+          <span class="material-symbols-outlined text-[15px]">picture_as_pdf</span><span class="hidden sm:inline">Export PDF</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="w-full pt-20 px-5 sm:px-8 pb-12">
+    <div class="max-w-7xl mx-auto flex flex-col gap-6">
+
+      <!-- 1. SCORECARD + 7-AXIS RADAR -->
+      <section id="scorecard" class="bg-white border border-zinc-200 rounded-xl shadow-sm overflow-hidden scroll-mt-24">
+        <div class="grid lg:grid-cols-[minmax(0,1fr)_400px]">
+          <div class="p-6 flex flex-col gap-5">
+            <div class="flex items-start gap-5 flex-wrap">
+              <div class="flex flex-col items-center justify-center w-[92px] h-[92px] rounded-xl bg-zinc-50 border border-zinc-200 shrink-0">
+                <div class="flex items-baseline gap-0.5">
+                  <span id="hc-score" class="font-headline text-[34px] font-bold text-zinc-950 tracking-tight leading-none tnum">–</span>
+                </div>
+                <span class="text-[10px] font-mono text-zinc-400 mt-1">/ 5.0</span>
+                <span id="hc-grade" class="text-[9.5px] font-semibold text-zinc-500 mt-1 uppercase tracking-wider">Grade –</span>
+              </div>
+              <div class="flex flex-col gap-1.5 min-w-0 flex-1">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span id="hc-status" class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wide border"><span class="w-1.5 h-1.5 rounded-full"></span><span></span></span>
+                  <span id="hc-verdict" class="text-[10px] font-mono text-zinc-400"></span>
+                </div>
+                <h1 id="hc-title" class="text-base font-bold text-zinc-950 font-headline tracking-tight leading-snug">—</h1>
+                <p id="hc-summary" class="text-[12.5px] text-zinc-500 leading-relaxed"></p>
+                <div class="flex items-center gap-2 mt-1 flex-wrap">
+                  <button id="btn-reeval" class="px-3 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-medium inline-flex items-center gap-1.5 transition-colors shadow-sm" type="button"><span class="material-symbols-outlined text-[15px]">refresh</span>Re-Evaluate</button>
+                  <button id="btn-copy" class="px-3 py-1.5 rounded-md border border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-700 text-xs font-medium inline-flex items-center gap-1.5 transition-colors" type="button"><span class="material-symbols-outlined text-[15px]">content_copy</span>Copy summary</button>
+                </div>
+              </div>
+            </div>
+            <div class="pt-4 border-t border-zinc-100">
+              <div class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-2">Executive finding</div>
+              <p id="exec" class="text-[13px] text-zinc-600 leading-relaxed"></p>
+              <p id="agg-sub" class="text-[11.5px] text-zinc-400 mt-2"></p>
+            </div>
+          </div>
+          <div class="border-t lg:border-t-0 lg:border-l border-zinc-100 bg-zinc-50/50 p-4 flex flex-col">
+            <div class="flex items-center justify-between px-1 mb-1">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-900 font-headline flex items-center gap-1.5"><span class="material-symbols-outlined text-zinc-400 text-[15px]">radar</span>7-Axis Radar</span>
+              <span class="text-[9.5px] text-zinc-400 font-mono">1.0 – 5.0</span>
+            </div>
+            <div id="radar-box" class="flex-1 flex items-center justify-center"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. DISQUALIFICATION ALERT -->
+      <div id="blocker" hidden class="w-full bg-rose-50/70 border border-rose-200 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+        <div class="flex items-start md:items-center gap-3 min-w-0">
+          <span class="material-symbols-outlined text-rose-600 text-[20px] shrink-0 mt-0.5 md:mt-0">error</span>
+          <div class="flex flex-col gap-1.5 min-w-0">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-1.5 min-w-0">
+              <span class="font-bold text-rose-950 shrink-0 uppercase tracking-wide text-[11px]">Disqualification Blocker:</span>
+              <span id="blocker-text" class="text-rose-900 leading-relaxed"></span>
+            </div>
+            <ul id="blocker-list" class="text-[11.5px] text-rose-800/90 space-y-0.5"></ul>
+          </div>
+        </div>
+        <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded bg-rose-700 text-white shrink-0 self-start md:self-auto shadow-sm">Presales Action Required</span>
+      </div>
+
+      <!-- 3. RUBRIC CRITERIA BREAKDOWN -->
+      <div class="flex flex-col gap-3 w-full">
+        <div class="flex items-center justify-between px-1 mb-1 gap-3 flex-wrap">
+          <div class="flex items-center gap-2">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-900 font-headline">Rubric Criteria Breakdown</h2>
+            <span id="rb-meta" class="text-[10px] text-zinc-500 font-mono bg-zinc-100 px-1.5 py-0.5 rounded shrink-0 font-medium whitespace-nowrap">—</span>
+          </div>
+          <button id="weights-btn" class="px-2.5 py-1 text-xs font-medium rounded-md border border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-700 inline-flex items-center gap-1.5 transition-colors shadow-sm no-print" type="button" aria-expanded="false">
+            <span class="material-symbols-outlined text-[14px] text-zinc-500">tune</span>Weights<span class="material-symbols-outlined text-[14px] text-zinc-400" id="weights-chevron">expand_more</span>
+          </button>
+        </div>
+        <div id="weights-panel" class="hidden w-full bg-white border border-zinc-200 rounded-xl p-5 shadow-lg mb-1 flex-col gap-4 no-print">
+          <div class="flex items-center justify-between pb-3 border-b border-zinc-100 gap-3 flex-wrap">
+            <div class="flex items-center gap-2.5">
+              <div class="w-7 h-7 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-700"><span class="material-symbols-outlined text-[16px]">tune</span></div>
+              <div>
+                <div class="flex items-center gap-2"><h3 class="text-xs font-bold uppercase tracking-wider text-zinc-950 font-headline">Rubric Criteria Weighting</h3><span id="weights-total" class="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-white font-semibold">Total: 100%</span></div>
+                <p class="text-[11px] text-zinc-500 mt-0.5">Weights are normalised to 100% at scoring time.</p>
+              </div>
+            </div>
+            <button id="weights-close" type="button" class="p-1 rounded text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 transition-colors" aria-label="Close weights panel"><span class="material-symbols-outlined text-[18px]">close</span></button>
+          </div>
+          <div id="weights-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3.5"></div>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-zinc-100">
+            <div class="flex items-center gap-2 text-xs text-zinc-500"><span class="material-symbols-outlined text-[16px] text-zinc-400">info</span><span>Applying recalculates the weighted score.</span></div>
+            <div class="flex items-center gap-2 self-end sm:self-auto">
+              <button id="weights-reset" type="button" class="px-3 py-1.5 rounded-md border border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-700 text-xs font-medium transition-colors">Reset Defaults</button>
+              <button id="weights-apply" type="button" class="px-3.5 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-medium inline-flex items-center gap-1.5 transition-colors shadow-sm"><span class="material-symbols-outlined text-[14px]">check</span>Apply &amp; Re-Evaluate</button>
+            </div>
+          </div>
+        </div>
+        <div id="rubric" class="flex flex-col gap-3"></div>
+      </div>
+
+      <!-- 4. INLINE DIFF & PROPOSAL AUDITOR -->
+      <section id="auditor" class="bg-white border border-zinc-200 rounded-xl shadow-sm overflow-hidden scroll-mt-24 no-print">
+        <div class="px-6 py-3.5 border-b border-zinc-100 flex items-center justify-between gap-3 flex-wrap">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-zinc-400 text-[18px]">splitscreen</span>
+            <div>
+              <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-900 font-headline flex items-center gap-2 flex-wrap">Inline Diff &amp; Proposal Auditor <span class="normal-case tracking-normal font-mono text-[10px] font-medium text-zinc-600 bg-zinc-100 rounded px-1.5 py-0.5">Live assist mode</span></h2>
+              <div class="text-[11px] font-mono text-zinc-500 mt-0.5">Inspecting: <span id="ed-target">—</span></div>
+            </div>
+          </div>
+          <div class="flex items-center gap-1 bg-zinc-100 rounded-lg p-1 text-[11.5px]">
+            <button data-view="annotated" class="ed-view">Annotated Original</button>
+            <button data-view="split" class="ed-view">Split Diff View</button>
+          </div>
+        </div>
+        <div class="grid lg:grid-cols-[1fr_340px]">
+          <div class="p-6 lg:border-r lg:border-zinc-100 min-w-0">
+            <div class="flex items-center justify-between mb-3 gap-2 flex-wrap">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Proposal Content Draft</span>
+              <span id="ed-counter" class="text-[10px] font-mono uppercase tracking-wider text-rose-700"></span>
+            </div>
+            <div id="ed-doc"></div>
+          </div>
+          <div class="p-6 bg-zinc-50/50">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-900 font-headline">Revision Assistant</span>
+              <span id="ed-sugcount" class="text-[10px] font-mono text-zinc-500"></span>
+            </div>
+            <div id="ed-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. VERDICT & PRIORITY FIXES -->
+      <section id="verdict-card" class="bg-white border border-zinc-200 rounded-xl shadow-sm p-6 scroll-mt-24">
+        <div class="grid lg:grid-cols-2 gap-6">
+          <div>
+            <h2 class="text-[10px] font-bold uppercase tracking-wider text-zinc-900 font-headline mb-3">Lead Evaluator Verdict</h2>
+            <div id="verdict" class="space-y-2"></div>
+          </div>
+          <div>
+            <h2 class="text-[10px] font-bold uppercase tracking-wider text-zinc-900 font-headline mb-3">Top 3 Priority Fixes <span class="float-right normal-case tracking-normal text-[10px] text-zinc-400 font-sans font-normal">Actionable</span></h2>
+            <ol id="topfixes" class="space-y-3"></ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. REQUIREMENTS MATRIX -->
+      <section id="matrix" class="bg-white border border-zinc-200 rounded-xl shadow-sm overflow-hidden scroll-mt-24">
+        <div class="px-6 py-3.5 border-b border-zinc-100 flex items-center justify-between gap-3 flex-wrap">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-900 font-headline flex items-center gap-2"><span class="material-symbols-outlined text-zinc-400 text-[16px]">grid_view</span>Requirements Matrix</h2>
+          <span id="tr-summary" class="text-[10px] font-mono text-zinc-500"></span>
+        </div>
+        <div id="trace-list" class="divide-y divide-zinc-100"></div>
+      </section>
+
+      <!-- 7. REGRESSION TEST BENCH -->
+      <section id="benchmark" class="bg-white border border-zinc-200 rounded-xl shadow-sm p-6 scroll-mt-24 no-print">
+        <div class="flex items-start justify-between gap-4 flex-wrap">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-700 shrink-0"><span class="material-symbols-outlined text-[17px]">assessment</span></div>
+            <div>
+              <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-900 font-headline flex items-center gap-2 flex-wrap">Regression Test Bench
+                <span id="bench-status" class="normal-case tracking-normal font-mono text-[10px] font-semibold text-zinc-500 bg-zinc-100 rounded px-1.5 py-0.5">Not run</span>
+              </h2>
+              <p class="text-[11.5px] text-zinc-500 mt-1 leading-relaxed max-w-xl">Re-runs four fixtures with known outcomes and asserts that behaviour still holds after a prompt, model or rubric change. Assertions are behavioural — ordering, readiness, blocker evidence — not exact scores.</p>
+            </div>
+          </div>
+          <button id="btn-validate" class="px-3.5 py-2 rounded-md bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-medium inline-flex items-center gap-1.5 transition-colors shadow-sm shrink-0" type="button"><span class="material-symbols-outlined text-[15px]">play_arrow</span>Run regression</button>
+        </div>
+        <div id="bench" class="mt-5 hidden"></div>
+      </section>
+
+      <footer class="text-center text-[10.5px] text-zinc-400 py-4 font-medium tracking-tight no-print">© 2026 BidLens · Institutional Evaluation Framework · SiviHack 2026</footer>
+    </div>
+  </main>
+</div>
+
+<!-- PRINT / PDF REPORT (hidden on screen, laid out for paper) -->
+<div id="print-report" aria-hidden="true"></div>
+
+<script src="js/state.js"></script>
+<script src="js/api.js"></script>
+<script src="js/radar.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/review.js"></script>
+<script src="js/chat.js"></script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProposalGuard — Evidence-Based Proposal Assurance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <h1 class="wordmark">ProposalGuard</h1>
+      <p class="tagline">Evidence-based proposal assurance</p>
+    </div>
+    <div class="header-right">
+      <span class="event-tag">SiviHack 2026</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- Input Area -->
+    <section class="input-area">
+      <div class="input-columns">
+        <div class="input-col">
+          <div class="col-label">
+            <span>Client RFP</span>
+            <div class="col-actions">
+              <label class="btn-upload">
+                Upload file
+                <input type="file" id="rfp-file" accept=".md,.txt,.pdf,.pptx,.docx" hidden />
+              </label>
+            </div>
+          </div>
+          <textarea id="rfp-text" placeholder="Paste the RFP or client brief here..."></textarea>
+          <div class="meta-line"><span id="rfp-count">0</span> chars</div>
+        </div>
+        <div class="input-col">
+          <div class="col-label">
+            <span>Proposal Draft</span>
+            <div class="col-actions">
+              <label class="btn-upload">
+                Upload file
+                <input type="file" id="proposal-file" accept=".md,.txt,.pdf,.pptx,.docx" hidden />
+              </label>
+            </div>
+          </div>
+          <textarea id="proposal-text" placeholder="Paste the proposal draft here..."></textarea>
+          <div class="meta-line"><span id="proposal-count">0</span> chars</div>
+        </div>
+      </div>
+
+      <!-- Criteria -->
+      <details class="criteria-panel" open>
+        <summary class="criteria-summary">
+          Review criteria
+          <div class="criteria-btns">
+            <button id="btn-auto-weights" class="btn-sm" type="button">Auto-detect from RFP</button>
+            <button id="btn-reset-weights" class="btn-sm btn-ghost" type="button">Reset</button>
+          </div>
+        </summary>
+        <div id="criteria-list" class="criteria-grid"></div>
+        <div id="ai-suggestions" class="ai-suggestions" hidden></div>
+        <div class="add-criterion-row">
+          <input type="text" id="new-crit-name" class="add-crit-input" placeholder="New criterion name" />
+          <input type="text" id="new-crit-desc" class="add-crit-input add-crit-desc" placeholder="Description (what to evaluate)" />
+          <button id="btn-add-criterion" class="btn-sm" type="button">+ Add</button>
+        </div>
+      </details>
+
+      <div class="action-row">
+        <button id="btn-analyze" disabled>
+          <span class="btn-label">Analyze proposal</span>
+          <span class="btn-busy" hidden>Analyzing<span class="dot-pulse"></span></span>
+        </button>
+      </div>
+
+      <!-- Progress Panel -->
+      <div id="progress-panel" class="progress-panel" hidden>
+        <div class="progress-stages">
+          <div class="progress-stage" id="stage-extract">
+            <div class="stage-indicator">1</div>
+            <div class="stage-info">
+              <div class="stage-label">Extracting requirements</div>
+              <div class="stage-sublabel">Analyzing RFP structure</div>
+            </div>
+          </div>
+          <div class="progress-connector"></div>
+          <div class="progress-stage" id="stage-analyze">
+            <div class="stage-indicator">2</div>
+            <div class="stage-info">
+              <div class="stage-label">Matching &amp; scoring</div>
+              <div class="stage-sublabel">Cross-referencing proposal against RFP</div>
+            </div>
+          </div>
+          <div class="progress-connector"></div>
+          <div class="progress-stage" id="stage-report">
+            <div class="stage-indicator">3</div>
+            <div class="stage-info">
+              <div class="stage-label">Generating report</div>
+              <div class="stage-sublabel">Building audit dashboard</div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-bar-outer">
+          <div class="progress-bar-inner" id="progress-fill"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results — Order: Readiness -> Blockers -> Coverage -> Traceability -> Scores -> Charts -->
+    <section id="results" class="results" hidden>
+      <!-- Send Readiness -->
+      <div id="readiness-card" class="readiness-card">
+        <div class="readiness-top">
+          <div class="readiness-left">
+            <div class="readiness-status" id="readiness-status">
+              <span class="readiness-icon" id="readiness-icon"></span>
+              <span class="readiness-label" id="readiness-label"></span>
+            </div>
+            <div class="readiness-stats" id="readiness-stats"></div>
+            <div class="readiness-summary" id="readiness-summary"></div>
+          </div>
+          <div class="readiness-right" id="readiness-donut"></div>
+        </div>
+        <div id="readiness-blockers" class="readiness-blockers" hidden></div>
+      </div>
+
+      <!-- Critical Issues (Blockers) -->
+      <div id="critical-section" class="result-block" hidden>
+        <h2 class="block-title serif">Critical issues</h2>
+        <div id="critical-list" class="findings-list"></div>
+      </div>
+
+      <!-- Risk Findings (Coverage) -->
+      <div id="flags-section" class="result-block" hidden>
+        <h2 class="block-title serif">Risk findings</h2>
+        <div id="flags-list" class="findings-list"></div>
+      </div>
+
+      <!-- Requirement Traceability Matrix -->
+      <div id="trace-section" class="result-block" hidden>
+        <details class="trace-toggle" open>
+          <summary class="block-title serif trace-toggle-summary">
+            Requirement traceability
+            <span class="trace-toggle-hint" id="trace-summary"></span>
+          </summary>
+          <div class="trace-table-wrap">
+            <table class="trace-table" id="trace-table">
+              <thead id="trace-thead"></thead>
+              <tbody id="trace-tbody"></tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+
+      <!-- Criteria Scores + Charts -->
+      <div id="scores-section" class="result-block">
+        <h2 class="block-title serif">Criteria scores</h2>
+        <div class="scores-dashboard">
+          <div class="overall-row" id="overall-row"></div>
+          <div id="radar-container" class="radar-container"></div>
+        </div>
+        <div id="scores-list" class="scores-list"></div>
+      </div>
+
+      <!-- Regression Test Bench -->
+      <div id="validation-section" class="result-block validation-section">
+        <h2 class="block-title serif">Regression Test Bench</h2>
+        <p class="validation-desc">Run all 4 sample proposals to verify scoring consistency, blocker detection, and readiness classification.</p>
+        <button id="btn-validate" class="btn-validate">
+          <span class="btn-label">Run regression suite</span>
+          <span class="btn-busy" hidden>Testing<span class="dot-pulse"></span></span>
+        </button>
+        <div id="validation-results" hidden></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>ProposalGuard &middot; SiviHack 2026 &middot; FPT Software Europe Sponsor Challenge</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

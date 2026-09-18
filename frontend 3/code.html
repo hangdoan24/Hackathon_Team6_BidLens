@@ -1,0 +1,238 @@
+<!DOCTYPE html><html lang="en" style=""><svg class="inline-defs-container" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"></svg><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>BidLens - Scorecard &amp; Rubric</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+    @layer base {
+      html, body { margin: 0; padding: 0; }
+      body { overscroll-behavior: none; }
+    }
+    ::-webkit-scrollbar { display: none; }
+    .card-transition {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            "sans": ["Inter", "sans-serif"],
+            "headline": ["Plus Jakarta Sans", "sans-serif"],
+            "mono": ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-zinc-50 font-sans text-zinc-900 antialiased selection:bg-zinc-200">
+<!-- LEFT NAVIGATION BAR -->
+<aside class="fixed left-0 top-0 h-full w-72 bg-white z-50 flex flex-col border-r border-zinc-200 overflow-y-auto">
+<!-- Brand Header -->
+<div class="h-16 px-6 flex items-center gap-3 border-b border-zinc-100">
+<div class="w-7 h-7 rounded-full bg-zinc-950 text-white flex items-center justify-center font-bold text-sm tracking-tight shadow-sm shrink-0 font-headline">B</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline font-bold text-zinc-950 text-sm tracking-tight">BidLens</span>
+</div>
+</div>
+<!-- Active RFP Context -->
+<div class="p-4 border-b border-zinc-100">
+<div class="p-3 rounded-lg bg-zinc-50 border border-zinc-100 flex flex-col gap-1">
+<div class="flex items-center justify-between text-[10px] uppercase font-semibold tracking-wider text-zinc-400">
+<span class="">Active RFP</span>
+<span class="material-symbols-outlined text-[13px]">unfold_more</span>
+</div>
+<div class="text-xs font-semibold text-zinc-900 truncate">Nordframe Cloud Migration</div>
+<div class="text-[11px] text-zinc-500 truncate">Response 1 (Weak Draft)</div>
+</div>
+</div>
+<div class="p-4 border-b border-zinc-100 bg-zinc-50/50">
+<div class="flex items-center justify-between mb-2">
+<span class="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded bg-zinc-900 text-white uppercase tracking-wider"><span class="material-symbols-outlined text-[11px] text-zinc-300">lock</span>Baseline RFP</span>
+<span class="text-[10px] font-mono text-zinc-400 uppercase tracking-wide">Ground Truth</span>
+</div>
+<div class="p-2.5 rounded-lg bg-white border border-zinc-200 shadow-sm flex items-center justify-between gap-2.5">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-8 h-8 rounded-md bg-zinc-100 text-zinc-800 flex items-center justify-center shrink-0 border border-zinc-200"><span class="material-symbols-outlined text-[17px]">description</span></div>
+<div class="min-w-0 flex-1"><div class="font-mono font-bold text-xs text-zinc-950 truncate">rfp_nordframe.md</div><div class="text-[10px] text-zinc-500 truncate">Nordframe Logistics AG</div></div>
+</div>
+<button class="p-1 rounded text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 transition-colors shrink-0 flex items-center justify-center" title="Inspect Spec" type="button"><span class="material-symbols-outlined text-[15px]">more_horiz</span></button>
+</div>
+</div>
+<!-- Benchmark Samples Switcher -->
+<div class="p-4 border-b border-zinc-100">
+<div class="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-2.5 px-1">Documents</div>
+<div class="flex flex-col gap-1">
+<button class="w-full text-left px-3 py-2 rounded-md bg-zinc-900 text-white font-medium flex items-center justify-between text-xs transition-colors" type="button">
+<span class="truncate flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>Sample 1 (Weak)</span>
+<span class="font-mono font-bold text-xs text-zinc-300">42%</span>
+</button>
+<button class="w-full text-left px-3 py-2 rounded-md text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors flex items-center justify-between text-xs font-normal" type="button">
+<span class="truncate">Sample 2 (Medium)</span>
+<span class="font-mono text-zinc-400 text-xs">71%</span>
+</button>
+<button class="w-full text-left px-3 py-2 rounded-md text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors flex items-center justify-between text-xs font-normal" type="button">
+<span class="truncate">Sample 3 (Strong)</span>
+<span class="font-mono text-zinc-400 text-xs">89%</span>
+</button>
+<button class="w-full text-left px-3 py-2 rounded-md text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors flex items-center justify-between text-xs font-normal" type="button">
+<span class="truncate">Sample 4 (Overpromise)</span>
+<span class="font-mono text-zinc-400 text-xs">Risk</span>
+</button>
+<button type="button" class="w-full mt-1.5 px-3 py-2 rounded-md border border-dashed border-zinc-300 hover:border-zinc-400 bg-zinc-50/50 hover:bg-zinc-100 text-zinc-600 hover:text-zinc-900 transition-colors flex items-center justify-center gap-1.5 text-xs font-medium group cursor-pointer"><span class="material-symbols-outlined text-[15px] text-zinc-400 group-hover:text-zinc-700 transition-colors">add</span><span class="">Add Proposal</span></button></div>
+</div>
+<!-- Navigation Items -->
+<div class="flex-1 overflow-y-auto p-4">
+<div class="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-2.5 px-1">Workspace</div>
+<nav class="flex flex-col gap-1">
+<a aria-current="page" class="px-3 py-2 flex items-center bg-zinc-100 text-zinc-950 font-semibold rounded-md text-xs transition-colors" href="#">
+<span class="material-symbols-outlined mr-2.5 text-[17px] text-zinc-900">assignment_turned_in</span>Scorecard &amp; Rubric
+</a>
+<a class="px-3 py-2 rounded-md text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors flex items-center text-xs" href="#">
+<span class="material-symbols-outlined mr-2.5 text-[17px] text-zinc-400">splitscreen</span>Dual-Pane Review
+</a>
+<a class="px-3 py-2 rounded-md text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors flex items-center text-xs" href="#">
+<span class="material-symbols-outlined mr-2.5 text-[17px] text-zinc-400">grid_view</span>Requirements Matrix
+</a>
+<a class="px-3 py-2 rounded-md text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors flex items-center text-xs" href="#">
+<span class="material-symbols-outlined mr-2.5 text-[17px] text-zinc-400">assessment</span>Export &amp; Pitch Report
+</a>
+<a class="px-3 py-2 rounded-md text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors flex items-center justify-between text-xs group" href="#"><span class="flex items-center"><span class="material-symbols-outlined mr-2.5 text-[17px] text-zinc-400 group-hover:text-zinc-700 transition-colors">radar</span>7-Axis Radar Analysis</span><span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-medium bg-zinc-100 text-zinc-500 group-hover:bg-zinc-200 transition-colors">7D</span></a><a class="px-3 py-2 rounded-md text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 transition-colors flex items-center text-xs group" href="#"><span class="material-symbols-outlined mr-2.5 text-[17px] text-zinc-400 group-hover:text-zinc-700 transition-colors">auto_fix_high</span>AI Revision</a></nav>
+</div>
+<!-- User Profile -->
+<div class="p-4 border-t border-zinc-100 bg-white">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-zinc-100 text-zinc-700 flex items-center justify-center shrink-0 border border-zinc-200">
+<span class="material-symbols-outlined text-[16px]">person</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="text-xs font-semibold text-zinc-950 truncate">Dr. Florian Weber</span>
+<span class="text-[11px] text-zinc-400 truncate">Lead Presales · DACH</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- MAIN WORKSPACE -->
+<div class="pl-72">
+<!-- Fixed Top Header -->
+<header class="fixed top-0 left-72 right-0 z-40 bg-white/95 backdrop-blur border-b border-zinc-200">
+<div class="h-16 w-full px-8 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 text-xs"><span class="font-medium text-zinc-900">Nordframe Logistics AG</span></div>
+
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-100 text-zinc-600 text-[11px] font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-zinc-400"></span>
+<span class="">AI Evaluator v2.4</span>
+</div>
+<button class="bg-zinc-900 hover:bg-zinc-800 text-white px-3.5 py-1.5 rounded-md text-xs font-medium inline-flex items-center gap-1.5 transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[15px]">picture_as_pdf</span>
+<span class="">Export Summary</span>
+</button>
+</div>
+</div>
+</header>
+<!-- CONTENT BODY -->
+<main class="w-full pt-20 px-8 pb-12">
+<div class="max-w-7xl mx-auto flex flex-col gap-6">
+<!-- 1. CLEAN HERO SCORECARD BAR -->
+<section class="bg-white border border-zinc-200 rounded-xl p-6 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+<!-- Left: Score & Heading -->
+<div class="flex items-center gap-5">
+<div class="flex flex-col items-center justify-center w-16 h-16 rounded-lg bg-zinc-50 border border-zinc-200 shrink-0">
+<div class="font-headline text-2xl font-bold text-zinc-950 tracking-tight leading-none">42</div>
+<span class="text-[10px] font-semibold text-zinc-500 mt-1 uppercase tracking-wider">Grade C</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 uppercase tracking-wide">
+<span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span> Disqualification Risk
+</span>
+</div>
+<h1 class="text-base font-bold text-zinc-950 font-headline tracking-tight">
+Nordframe Cloud Migration · Weak Draft Assessment
+</h1>
+</div>
+</div>
+<!-- Right: Streamlined Metrics & Actions -->
+<div class="flex flex-wrap items-center gap-3 lg:border-l lg:border-zinc-100 lg:pl-6"><div class="flex items-center gap-2"><button class="p-2 rounded-md border border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-600 transition-colors" onclick="navigator.clipboard.writeText('Evaluation 42/100 (Grade C) - Disqualification Risk. Fix Section 4.1 Fixed Pricing.'); alert('Summary copied!');" title="Copy Summary" type="button"><span class="material-symbols-outlined text-[16px]">content_copy</span></button><button class="px-3.5 py-2 rounded-md bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-medium inline-flex items-center gap-1.5 transition-colors shadow-sm" type="button"><span class="material-symbols-outlined text-[15px]">refresh</span><span class="">Re-Evaluate</span></button></div></div>
+</section>
+<!-- 2. STREAMLINED DISQUALIFICATION ALERT -->
+<div class="w-full bg-rose-50/70 border border-rose-200 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+<div class="flex items-start md:items-center gap-3 min-w-0">
+<span class="material-symbols-outlined text-rose-600 text-[20px] shrink-0 mt-0.5 md:mt-0">error</span>
+<div class="flex flex-col sm:flex-row sm:items-center gap-1.5 min-w-0">
+<span class="font-bold text-rose-950 shrink-0 uppercase tracking-wide text-[11px]">Disqualification Blocker:</span>
+<span class="text-rose-900 leading-relaxed">
+Breaches commercial clause 4.1 (<strong class="font-mono font-semibold">Uncapped T&amp;M model</strong>) and omits mandatory Disaster Recovery rollback annex.
+</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded bg-rose-700 text-white shrink-0 self-start md:self-auto shadow-sm">
+Presales Action Required
+</span>
+</div>
+<!-- 3. TWO-COLUMN WORKBENCH -->
+<div class="grid grid-cols-1 gap-6 items-start" id="workbenchGrid">
+<!-- LEFT 8 COLS: Clean Criteria Breakdown -->
+<div class="flex flex-col gap-3 w-full" id="criteriaColumn">
+<div class="flex items-center justify-between px-1 mb-1">
+<div class="flex items-center gap-2">
+<h2 class="text-xs font-bold uppercase tracking-wider text-zinc-900 font-headline">Rubric Criteria Breakdown</h2>
+<span class="text-[10px] text-zinc-500 font-mono bg-zinc-100 px-1.5 py-0.5 rounded shrink-0 font-medium whitespace-nowrap" style="white-space: nowrap;">8 Dimensions · 1.0–5.0</span>
+</div>
+<div class="relative inline-block text-left"><button id="weights-btn" onclick="toggleWeightsPanel()" class="px-2.5 py-1 text-xs font-medium rounded-md border border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-700 inline-flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer" type="button" aria-expanded="false" aria-haspopup="true"><span class="material-symbols-outlined text-[14px] text-zinc-500">tune</span><span class="">Weights</span><span class="material-symbols-outlined text-[14px] text-zinc-400 transition-transform duration-200" id="weights-btn-chevron">expand_more</span></button></div>
+</div><div id="weights-panel" class="hidden w-full bg-white border border-zinc-200 rounded-xl p-5 shadow-xl mb-3 flex flex-col gap-4 transition-all duration-200"><div class="flex items-center justify-between pb-3 border-b border-zinc-100"><div class="flex items-center gap-2.5"><div class="w-7 h-7 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-700"><span class="material-symbols-outlined text-[16px]">tune</span></div><div><div class="flex items-center gap-2"><h3 class="text-xs font-bold uppercase tracking-wider text-zinc-950 font-headline">Rubric Criteria Weighting</h3><span class="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-white font-semibold" id="weights-total-badge">Total: 100%</span></div><p class="text-[11px] text-zinc-500 mt-0.5">Adjust priority multipliers to calibrate overall qualification score.</p></div></div><div class="flex items-center gap-2"><button type="button" onclick="resetWeights()" class="px-2.5 py-1 rounded text-[11px] font-medium text-zinc-600 hover:text-zinc-900 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 transition-colors inline-flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">restart_alt</span><span class="">Reset Defaults</span></button><button type="button" onclick="toggleWeightsPanel(false)" class="p-1 rounded text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 transition-colors inline-flex items-center justify-center" aria-label="Close weights panel"><span class="material-symbols-outlined text-[18px]">close</span></button></div></div><div class="grid grid-cols-1 md:grid-cols-2 gap-3.5"><div class="p-3 rounded-lg bg-zinc-50/70 border border-zinc-200 flex flex-col gap-2"><div class="flex items-center justify-between"><span class="text-xs font-semibold text-zinc-900 truncate">01. Problem Understanding</span><span class="font-mono text-xs font-bold text-zinc-900 bg-white px-2 py-0.5 rounded border border-zinc-200" id="wval-1">15%</span></div><div class="flex items-center gap-2"><input type="range" min="5" max="40" step="5" value="15" oninput="updateWeight(1, this.value)" class="w-full h-1.5 bg-zinc-200 rounded-lg appearance-none cursor-pointer accent-zinc-900"><span class="text-[10px] font-medium text-zinc-500 shrink-0">Standard</span></div></div><div class="p-3 rounded-lg bg-zinc-50/70 border border-zinc-200 flex flex-col gap-2"><div class="flex items-center justify-between"><span class="text-xs font-semibold text-zinc-900 truncate">02. Scope &amp; Deliverables</span><span class="font-mono text-xs font-bold text-zinc-900 bg-white px-2 py-0.5 rounded border border-zinc-200" id="wval-2">15%</span></div><div class="flex items-center gap-2"><input type="range" min="5" max="40" step="5" value="15" oninput="updateWeight(2, this.value)" class="w-full h-1.5 bg-zinc-200 rounded-lg appearance-none cursor-pointer accent-zinc-900"><span class="text-[10px] font-medium text-zinc-500 shrink-0">Standard</span></div></div><div class="p-3 rounded-lg bg-rose-50/60 border border-rose-200 flex flex-col gap-2"><div class="flex items-center justify-between"><div class="flex items-center gap-1.5"><span class="text-xs font-bold text-rose-950 truncate">03. Pricing &amp; Commercials</span><span class="px-1.5 py-0.2 rounded text-[9px] font-semibold bg-rose-100 text-rose-800 uppercase">Crucial</span></div><span class="font-mono text-xs font-bold text-rose-700 bg-white px-2 py-0.5 rounded border border-rose-200" id="wval-3">20%</span></div><div class="flex items-center gap-2"><input type="range" min="5" max="40" step="5" value="20" oninput="updateWeight(3, this.value)" class="w-full h-1.5 bg-rose-200 rounded-lg appearance-none cursor-pointer accent-rose-600"><span class="text-[10px] font-semibold text-rose-700 shrink-0">High Priority</span></div></div><div class="p-3 rounded-lg bg-zinc-50/70 border border-zinc-200 flex flex-col gap-2"><div class="flex items-center justify-between"><span class="text-xs font-semibold text-zinc-900 truncate">04. Timeline &amp; Governance</span><span class="font-mono text-xs font-bold text-zinc-900 bg-white px-2 py-0.5 rounded border border-zinc-200" id="wval-4">10%</span></div><div class="flex items-center gap-2"><input type="range" min="5" max="40" step="5" value="10" oninput="updateWeight(4, this.value)" class="w-full h-1.5 bg-zinc-200 rounded-lg appearance-none cursor-pointer accent-zinc-900"><span class="text-[10px] font-medium text-zinc-500 shrink-0">Moderate</span></div></div><div class="p-3 rounded-lg bg-zinc-50/70 border border-zinc-200 flex flex-col gap-2"><div class="flex items-center justify-between"><span class="text-xs font-semibold text-zinc-900 truncate">05. Completeness vs RFP</span><span class="font-mono text-xs font-bold text-zinc-900 bg-white px-2 py-0.5 rounded border border-zinc-200" id="wval-5">15%</span></div><div class="flex items-center gap-2"><input type="range" min="5" max="40" step="5" value="15" oninput="updateWeight(5, this.value)" class="w-full h-1.5 bg-zinc-200 rounded-lg appearance-none cursor-pointer accent-zinc-900"><span class="text-[10px] font-medium text-zinc-500 shrink-0">Standard</span></div></div><div class="p-3 rounded-lg bg-zinc-50/70 border border-zinc-200 flex flex-col gap-2"><div class="flex items-center justify-between"><span class="text-xs font-semibold text-zinc-900 truncate">06. Tone, Value Prop &amp; Proof</span><span class="font-mono text-xs font-bold text-zinc-900 bg-white px-2 py-0.5 rounded border border-zinc-200" id="wval-6">10%</span></div><div class="flex items-center gap-2"><input type="range" min="5" max="40" step="5" value="10" oninput="updateWeight(6, this.value)" class="w-full h-1.5 bg-zinc-200 rounded-lg appearance-none cursor-pointer accent-zinc-900"><span class="text-[10px] font-medium text-zinc-500 shrink-0">Moderate</span></div></div><div class="p-3 rounded-lg bg-zinc-50/70 border border-zinc-200 flex flex-col gap-2"><div class="flex items-center justify-between"><span class="text-xs font-semibold text-zinc-900 truncate">07. Risk &amp; Assumptions</span><span class="font-mono text-xs font-bold text-zinc-900 bg-white px-2 py-0.5 rounded border border-zinc-200" id="wval-7">10%</span></div><div class="flex items-center gap-2"><input type="range" min="5" max="40" step="5" value="10" oninput="updateWeight(7, this.value)" class="w-full h-1.5 bg-zinc-200 rounded-lg appearance-none cursor-pointer accent-zinc-900"><span class="text-[10px] font-medium text-zinc-500 shrink-0">Moderate</span></div></div><div class="p-3 rounded-lg bg-zinc-50/70 border border-zinc-200 flex flex-col gap-2"><div class="flex items-center justify-between"><span class="text-xs font-semibold text-zinc-900 truncate">08. Data Sovereignty &amp; BaFin</span><span class="font-mono text-xs font-bold text-zinc-900 bg-white px-2 py-0.5 rounded border border-zinc-200" id="wval-8">5%</span></div><div class="flex items-center gap-2"><input type="range" min="5" max="40" step="5" value="5" oninput="updateWeight(8, this.value)" class="w-full h-1.5 bg-zinc-200 rounded-lg appearance-none cursor-pointer accent-zinc-900"><span class="text-[10px] font-medium text-zinc-500 shrink-0">Compliant Tier</span></div></div></div><div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-zinc-100"><div class="flex items-center gap-2 text-xs text-zinc-500"><span class="material-symbols-outlined text-[16px] text-zinc-400">info</span><span class="">Weights re-calibrate the overall Grade C (42/100) dynamically.</span></div><div class="flex items-center gap-2 self-end sm:self-auto"><button type="button" onclick="toggleWeightsPanel(false)" class="px-3 py-1.5 rounded-md border border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-700 text-xs font-medium transition-colors">Cancel</button><button type="button" onclick="applyWeights()" class="px-3.5 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-medium inline-flex items-center gap-1.5 transition-colors shadow-sm"><span class="material-symbols-outlined text-[14px]">check</span><span class="">Apply Weights</span></button></div></div></div><script>function toggleWeightsPanel(forceState) { const panel = document.getElementById('weights-panel'); const btn = document.getElementById('weights-btn'); const chevron = document.getElementById('weights-btn-chevron'); if (!panel) return; const shouldOpen = forceState !== undefined ? forceState : panel.classList.contains('hidden'); if (shouldOpen) { panel.classList.remove('hidden'); if (btn) { btn.classList.add('bg-zinc-100', 'border-zinc-300', 'text-zinc-900'); btn.setAttribute('aria-expanded', 'true'); } if (chevron) { chevron.textContent = 'expand_less'; } } else { panel.classList.add('hidden'); if (btn) { btn.classList.remove('bg-zinc-100', 'border-zinc-300', 'text-zinc-900'); btn.setAttribute('aria-expanded', 'false'); } if (chevron) { chevron.textContent = 'expand_more'; } } } function updateWeight(idx, val) { const label = document.getElementById('wval-' + idx); if (label) label.textContent = val + '%'; calculateTotalWeight(); } function calculateTotalWeight() { let total = 0; for (let i = 1; i <= 8; i++) { const el = document.getElementById('wval-' + i); if (el) total += parseInt(el.textContent, 10) || 0; } const badge = document.getElementById('weights-total-badge'); if (badge) { badge.textContent = 'Total: ' + total + '%'; if (total === 100) { badge.className = 'px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-white font-semibold'; } else { badge.className = 'px-2 py-0.5 rounded text-[10px] font-mono bg-rose-600 text-white font-semibold'; } } } function resetWeights() { const defaults = [15, 15, 20, 10, 15, 10, 10, 5]; defaults.forEach((d, idx) => { const i = idx + 1; const input = document.querySelector('#weights-panel input[oninput*="(' + i + ',"]'); if (input) input.value = d; const label = document.getElementById('wval-' + i); if (label) label.textContent = d + '%'; }); calculateTotalWeight(); } function applyWeights() { toggleWeightsPanel(false); }</script>
+<!-- Criteria Card 1 -->
+<div class="bg-white border border-zinc-200 rounded-lg p-4 hover:border-zinc-300 transition-colors shadow-sm flex flex-col gap-2.5"><div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3"><div class="min-w-0 flex-1"><div class="flex items-center gap-2 flex-wrap"><span class="font-mono text-xs font-semibold text-zinc-400">01.</span><span class="text-xs font-bold text-zinc-950">Problem Understanding &amp; Context</span><button type="button" onclick="const el=document.getElementById('deficiency-01'); const icon=this.querySelector('.chevron-icon'); if(el.classList.contains('hidden')){el.classList.remove('hidden'); icon.textContent='expand_less';} else {el.classList.add('hidden'); icon.textContent='expand_more';}" class="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-500 hover:text-zinc-900 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 px-2 py-0.5 rounded transition-colors"><span class="material-symbols-outlined text-[14px] text-zinc-400">info</span><span class="">Deficiency details</span><span class="material-symbols-outlined text-[13px] chevron-icon">expand_more</span></button></div></div><div class="flex items-center gap-3 shrink-0 sm:border-l sm:border-zinc-100 sm:pl-4"><span class="px-2 py-0.5 rounded text-[10px] font-medium bg-zinc-100 text-zinc-700">Partial Match</span><div class="flex items-center gap-2"><div class="w-14 h-1.5 bg-zinc-100 rounded-full overflow-hidden"><div class="h-full bg-zinc-600 rounded-full" style="width: 50%"></div></div><span class="font-mono text-xs font-semibold text-zinc-900">2.5</span></div></div></div><div id="deficiency-01" class="hidden pt-2 border-t border-zinc-100"><div class="bg-zinc-50 rounded border border-zinc-200/80 px-3 py-2 text-zinc-600 text-xs leading-relaxed flex items-start gap-2"><span class="font-medium text-zinc-800 text-[11px] uppercase tracking-wide shrink-0">Deficiency:</span><span class="">Generic freight boilerplate; omits required 45ms intra-DACH warehouse throughput mandate.</span></div></div></div>
+<!-- Criteria Card 2 -->
+<div class="bg-white border border-zinc-200 rounded-lg p-4 hover:border-zinc-300 transition-colors shadow-sm flex flex-col gap-2.5"><div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3"><div class="min-w-0 flex-1"><div class="flex items-center gap-2 flex-wrap"><span class="font-mono text-xs font-semibold text-zinc-400">02.</span><span class="text-xs font-bold text-zinc-950">Scope &amp; Deliverables Clarity</span><button type="button" onclick="const el=document.getElementById('deficiency-02'); const icon=this.querySelector('.chevron-icon'); if(el.classList.contains('hidden')){el.classList.remove('hidden'); icon.textContent='expand_less';} else {el.classList.add('hidden'); icon.textContent='expand_more';}" class="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-500 hover:text-zinc-900 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 px-2 py-0.5 rounded transition-colors"><span class="material-symbols-outlined text-[14px] text-zinc-400">info</span><span class="">Deficiency details</span><span class="material-symbols-outlined text-[13px] chevron-icon">expand_more</span></button></div></div><div class="flex items-center gap-3 shrink-0 sm:border-l sm:border-zinc-100 sm:pl-4"><span class="px-2 py-0.5 rounded text-[10px] font-medium bg-zinc-100 text-zinc-700">Ambiguous</span><div class="flex items-center gap-2"><div class="w-14 h-1.5 bg-zinc-100 rounded-full overflow-hidden"><div class="h-full bg-zinc-600 rounded-full" style="width: 40%"></div></div><span class="font-mono text-xs font-semibold text-zinc-900">2.0</span></div></div></div><div id="deficiency-02" class="hidden pt-2 border-t border-zinc-100"><div class="bg-zinc-50 rounded border border-zinc-200/80 px-3 py-2 text-zinc-600 text-xs leading-relaxed flex items-start gap-2"><span class="font-medium text-zinc-800 text-[11px] uppercase tracking-wide shrink-0">Deficiency:</span><span class="">Conflates discovery with cutover; acceptance gates (M0-M5) undefined.</span></div></div></div>
+<!-- Criteria Card 3 (CRITICAL DISQUALIFIER) -->
+<div class="bg-white border border-rose-300 border-l-4 border-l-rose-600 rounded-lg p-4 shadow-sm flex flex-col gap-2.5"><div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3"><div class="min-w-0 flex-1"><div class="flex items-center gap-2 flex-wrap"><span class="font-mono text-xs font-bold text-rose-700">03.</span><span class="text-xs font-bold text-rose-950">Pricing Clarity &amp; Commercials</span><span class="px-1.5 py-0.2 rounded text-[10px] font-semibold bg-rose-100 text-rose-800 uppercase">Breach</span><button type="button" onclick="const el=document.getElementById('deficiency-03'); const icon=this.querySelector('.chevron-icon'); if(el.classList.contains('hidden')){el.classList.remove('hidden'); icon.textContent='expand_less';} else {el.classList.add('hidden'); icon.textContent='expand_more';}" class="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-700 hover:text-rose-900 bg-rose-50 hover:bg-rose-100 border border-rose-200 px-2 py-0.5 rounded transition-colors"><span class="material-symbols-outlined text-[14px] text-rose-600">warning</span><span class="">Breach details</span><span class="material-symbols-outlined text-[13px] chevron-icon">expand_more</span></button></div></div><div class="flex items-center gap-3 shrink-0 sm:border-l sm:border-rose-100 sm:pl-4"><span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-100 text-rose-800">Uncapped T&amp;M</span><div class="flex items-center gap-2"><div class="w-14 h-1.5 bg-rose-100 rounded-full overflow-hidden"><div class="h-full bg-rose-600 rounded-full" style="width: 20%"></div></div><span class="font-mono text-xs font-bold text-rose-700">1.0</span></div></div></div><div id="deficiency-03" class="hidden pt-2 border-t border-rose-100"><div class="bg-rose-50/70 rounded border border-rose-200 px-3 py-2 text-rose-900 text-xs leading-relaxed flex items-start gap-2"><span class="font-bold text-rose-950 text-[11px] uppercase tracking-wide shrink-0">Critical Breach:</span><span class="">Rates quoted "on request" under pure T&amp;M; rejects RFP mandatory €450k NTE ceiling.</span></div></div></div>
+<!-- Criteria Card 4 -->
+<div class="bg-white border border-zinc-200 rounded-lg p-4 hover:border-zinc-300 transition-colors shadow-sm flex flex-col gap-2.5"><div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3"><div class="min-w-0 flex-1"><div class="flex items-center gap-2 flex-wrap"><span class="font-mono text-xs font-semibold text-zinc-400">04.</span><span class="text-xs font-bold text-zinc-950">Timeline &amp; Project Governance</span><button type="button" onclick="const el=document.getElementById('deficiency-04'); const icon=this.querySelector('.chevron-icon'); if(el.classList.contains('hidden')){el.classList.remove('hidden'); icon.textContent='expand_less';} else {el.classList.add('hidden'); icon.textContent='expand_more';}" class="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-500 hover:text-zinc-900 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 px-2 py-0.5 rounded transition-colors"><span class="material-symbols-outlined text-[14px] text-zinc-400">info</span><span class="">Deficiency details</span><span class="material-symbols-outlined text-[13px] chevron-icon">expand_more</span></button></div></div><div class="flex items-center gap-3 shrink-0 sm:border-l sm:border-zinc-100 sm:pl-4"><span class="px-2 py-0.5 rounded text-[10px] font-medium bg-zinc-100 text-zinc-700">Uncertain</span><div class="flex items-center gap-2"><div class="w-14 h-1.5 bg-zinc-100 rounded-full overflow-hidden"><div class="h-full bg-zinc-700 rounded-full" style="width: 30%"></div></div><span class="font-mono text-xs font-semibold text-zinc-900">1.5</span></div></div></div><div id="deficiency-04" class="hidden pt-2 border-t border-zinc-100"><div class="bg-zinc-50 rounded border border-zinc-200/80 px-3 py-2 text-zinc-600 text-xs leading-relaxed flex items-start gap-2"><span class="font-medium text-zinc-800 text-[11px] uppercase tracking-wide shrink-0">Deficiency:</span><span class="">Evasive "in due course" phrasing; no 16-week sprint Gantt or dry-run failover calendar.</span></div></div></div>
+<!-- Criteria Card 5 -->
+<div class="bg-white border border-zinc-200 rounded-lg p-4 hover:border-zinc-300 transition-colors shadow-sm flex flex-col gap-2.5"><div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3"><div class="min-w-0 flex-1"><div class="flex items-center gap-2 flex-wrap"><span class="font-mono text-xs font-semibold text-zinc-400">05.</span><span class="text-xs font-bold text-zinc-950">Completeness vs RFP Requirements</span><button type="button" onclick="const el=document.getElementById('deficiency-05'); const icon=this.querySelector('.chevron-icon'); if(el.classList.contains('hidden')){el.classList.remove('hidden'); icon.textContent='expand_less';} else {el.classList.add('hidden'); icon.textContent='expand_more';}" class="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-500 hover:text-zinc-900 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 px-2 py-0.5 rounded transition-colors"><span class="material-symbols-outlined text-[14px] text-zinc-400">info</span><span class="">Deficiency details</span><span class="material-symbols-outlined text-[13px] chevron-icon">expand_more</span></button></div></div><div class="flex items-center gap-3 shrink-0 sm:border-l sm:border-zinc-100 sm:pl-4"><span class="px-2 py-0.5 rounded text-[10px] font-medium bg-zinc-100 text-zinc-700">Missing Annexes</span><div class="flex items-center gap-2"><div class="w-14 h-1.5 bg-zinc-100 rounded-full overflow-hidden"><div class="h-full bg-zinc-600 rounded-full" style="width: 40%"></div></div><span class="font-mono text-xs font-semibold text-zinc-900">2.0</span></div></div></div><div id="deficiency-05" class="hidden pt-2 border-t border-zinc-100"><div class="bg-zinc-50 rounded border border-zinc-200/80 px-3 py-2 text-zinc-600 text-xs leading-relaxed flex items-start gap-2"><span class="font-medium text-zinc-800 text-[11px] uppercase tracking-wide shrink-0">Deficiency:</span><span class="">Omits Annex D (Rollback / DR plan) and Annex F (Subcontractors).</span></div></div></div>
+<!-- Criteria Card 6 -->
+<div class="bg-white border border-zinc-200 rounded-lg p-4 hover:border-zinc-300 transition-colors shadow-sm flex flex-col gap-2.5"><div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3"><div class="min-w-0 flex-1"><div class="flex items-center gap-2 flex-wrap"><span class="font-mono text-xs font-semibold text-zinc-400">06.</span><span class="text-xs font-bold text-zinc-950">Tone, Value Proposition &amp; Proof</span><button type="button" onclick="const el=document.getElementById('deficiency-06'); const icon=this.querySelector('.chevron-icon'); if(el.classList.contains('hidden')){el.classList.remove('hidden'); icon.textContent='expand_less';} else {el.classList.add('hidden'); icon.textContent='expand_more';}" class="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-500 hover:text-zinc-900 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 px-2 py-0.5 rounded transition-colors"><span class="material-symbols-outlined text-[14px] text-zinc-400">info</span><span class="">Deficiency details</span><span class="material-symbols-outlined text-[13px] chevron-icon">expand_more</span></button></div></div><div class="flex items-center gap-3 shrink-0 sm:border-l sm:border-zinc-100 sm:pl-4"><span class="px-2 py-0.5 rounded text-[10px] font-medium bg-zinc-100 text-zinc-700">Boilerplate</span><div class="flex items-center gap-2"><div class="w-14 h-1.5 bg-zinc-100 rounded-full overflow-hidden"><div class="h-full bg-zinc-600 rounded-full" style="width: 60%"></div></div><span class="font-mono text-xs font-semibold text-zinc-900">3.0</span></div></div></div><div id="deficiency-06" class="hidden pt-2 border-t border-zinc-100"><div class="bg-zinc-50 rounded border border-zinc-200/80 px-3 py-2 text-zinc-600 text-xs leading-relaxed flex items-start gap-2"><span class="font-medium text-zinc-800 text-[11px] uppercase tracking-wide shrink-0">Deficiency:</span><span class="">Generic marketing claims. Missing two verified DACH logistics references &amp; BaFin certifications.</span></div></div></div>
+<!-- Criteria Card 7 -->
+<div class="bg-white border border-zinc-200 rounded-lg p-4 hover:border-zinc-300 transition-colors shadow-sm flex flex-col gap-2.5"><div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3"><div class="min-w-0 flex-1"><div class="flex items-center gap-2 flex-wrap"><span class="font-mono text-xs font-semibold text-zinc-400">07.</span><span class="text-xs font-bold text-zinc-950">Risk &amp; Assumptions Transparency</span><button type="button" onclick="const el=document.getElementById('deficiency-07'); const icon=this.querySelector('.chevron-icon'); if(el.classList.contains('hidden')){el.classList.remove('hidden'); icon.textContent='expand_less';} else {el.classList.add('hidden'); icon.textContent='expand_more';}" class="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-500 hover:text-zinc-900 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 px-2 py-0.5 rounded transition-colors"><span class="material-symbols-outlined text-[14px] text-zinc-400">info</span><span class="">Deficiency details</span><span class="material-symbols-outlined text-[13px] chevron-icon">expand_more</span></button></div></div><div class="flex items-center gap-3 shrink-0 sm:border-l sm:border-zinc-100 sm:pl-4"><span class="px-2 py-0.5 rounded text-[10px] font-medium bg-zinc-100 text-zinc-700">Unstated Window</span><div class="flex items-center gap-2"><div class="w-14 h-1.5 bg-zinc-100 rounded-full overflow-hidden"><div class="h-full bg-zinc-900 rounded-full" style="width: 20%"></div></div><span class="font-mono text-xs font-semibold text-zinc-900">1.0</span></div></div></div><div id="deficiency-07" class="hidden pt-2 border-t border-zinc-100"><div class="bg-zinc-50 rounded border border-zinc-200/80 px-3 py-2 text-zinc-600 text-xs leading-relaxed flex items-start gap-2"><span class="font-medium text-zinc-800 text-[11px] uppercase tracking-wide shrink-0">Deficiency:</span><span class="">Assumes unannounced 12-hour offline window for ERP indexing, directly violating zero-downtime SLA.</span></div></div></div>
+<!-- Criteria Card 8 -->
+<div class="bg-white border border-zinc-200 rounded-lg p-4 hover:border-zinc-300 transition-colors shadow-sm flex flex-col gap-2.5"><div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3"><div class="min-w-0 flex-1"><div class="flex items-center gap-2 flex-wrap"><span class="font-mono text-xs font-semibold text-zinc-400">08.</span><span class="text-xs font-bold text-zinc-950">Data Sovereignty &amp; BaFin Compliance</span><span class="px-1.5 py-0.2 rounded text-[10px] font-medium bg-zinc-100 text-zinc-600">Custom</span><button type="button" onclick="const el=document.getElementById('deficiency-08'); const icon=this.querySelector('.chevron-icon'); if(el.classList.contains('hidden')){el.classList.remove('hidden'); icon.textContent='expand_less';} else {el.classList.add('hidden'); icon.textContent='expand_more';}" class="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-500 hover:text-zinc-900 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 px-2 py-0.5 rounded transition-colors"><span class="material-symbols-outlined text-[14px] text-zinc-400">info</span><span class="">Deficiency details</span><span class="material-symbols-outlined text-[13px] chevron-icon">expand_more</span></button></div></div><div class="flex items-center gap-3 shrink-0 sm:border-l sm:border-zinc-100 sm:pl-4"><span class="px-2 py-0.5 rounded text-[10px] font-medium bg-zinc-100 text-zinc-700">Partial Match</span><div class="flex items-center gap-2"><div class="w-14 h-1.5 bg-zinc-100 rounded-full overflow-hidden"><div class="h-full bg-zinc-600 rounded-full" style="width: 50%"></div></div><span class="font-mono text-xs font-semibold text-zinc-900">2.5</span></div></div></div><div id="deficiency-08" class="hidden pt-2 border-t border-zinc-100"><div class="bg-zinc-50 rounded border border-zinc-200/80 px-3 py-2 text-zinc-600 text-xs leading-relaxed flex items-start gap-2"><span class="font-medium text-zinc-800 text-[11px] uppercase tracking-wide shrink-0">Deficiency:</span><span class="">Response references US-East cloud instances as primary backup; lacks explicit Frankfurt localized tenancy guarantee.</span></div></div></div>
+<!-- Sleek Add Criterion Bar -->
+
+<button type="button" class="w-full border-2 border-dashed border-zinc-300 hover:border-zinc-500 rounded-xl p-3.5 flex items-center justify-center gap-2 cursor-pointer transition-all bg-zinc-50/50 hover:bg-zinc-100/80 text-zinc-700 font-semibold text-xs uppercase tracking-wider group"><span class="material-symbols-outlined text-[18px] text-zinc-500 group-hover:text-zinc-900 transition-colors">add</span><span class="">Add Criterion</span></button></div>
+<!-- RIGHT 4 COLS: EXACT 3 CARDS RESTORED WITH FULL INDEPENDENT COLLAPSE/EXPAND -->
+
+</div>
+<!-- 4. APPENDIX B: COMPACT SAMPLES BENCHMARK BAR -->
+<section class="bg-white border border-zinc-200 rounded-xl p-6 shadow-sm flex flex-col gap-5 text-zinc-900"><div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-zinc-100 gap-3 cursor-pointer select-none group" onclick="toggleExecutiveOverview()"><div class="flex items-center gap-3"><div class="w-9 h-9 rounded-lg bg-zinc-100 border border-zinc-200 flex items-center justify-center text-zinc-700 shrink-0"><span class="material-symbols-outlined text-[20px]">analytics</span></div><div><div class="flex items-center gap-2"><h2 class="text-xs font-bold uppercase tracking-wider text-zinc-900 font-headline">Executive Overview &amp; Key Signals</h2><span class="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-100 text-zinc-600 border border-zinc-200 font-semibold">Analysis Summary</span></div></div></div><div class="flex items-center gap-3 self-start sm:self-auto"><button aria-label="Toggle Executive Overview" class="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 hover:text-zinc-900 px-2 py-1 rounded hover:bg-zinc-100 transition-colors" id="exec-overview-toggle" type="button"><span id="exec-overview-label" class="">Collapse</span><span class="material-symbols-outlined text-[16px] transition-transform duration-200" id="exec-overview-chevron">expand_less</span></button></div></div><div class="grid grid-cols-1 md:grid-cols-3 gap-4 card-transition" id="exec-overview-body"><div class="p-5 rounded-xl bg-zinc-50 border border-zinc-200 shadow-sm flex flex-col justify-between gap-4"><div class="flex items-center justify-between"><span class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">Coverage</span><span class="material-symbols-outlined text-zinc-400 text-[18px]">checklist</span></div><div><div class="flex items-baseline gap-2"><span class="font-mono font-bold text-2xl text-zinc-950 tracking-tight leading-none">5/18</span><span class="text-xs font-mono font-semibold text-zinc-500">(28%)</span></div><div class="w-full h-1.5 bg-zinc-200 rounded-full mt-2.5 overflow-hidden"><div class="h-full bg-zinc-600 rounded-full" style="width: 28%"></div></div></div></div><div class="p-5 rounded-xl bg-rose-50 border border-rose-200 shadow-sm flex flex-col justify-between gap-4"><div class="flex items-center justify-between"><span class="text-[11px] font-bold text-rose-700 uppercase tracking-wider">Commercial Risk</span><span class="material-symbols-outlined text-rose-600 text-[18px]">gavel</span></div><div><div class="font-mono font-bold text-2xl text-rose-950 tracking-tight leading-none">Uncapped T&amp;M</div><span class="inline-block mt-2 px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-100 text-rose-800 border border-rose-200 uppercase tracking-wide">Breach · Clause §4.1</span></div></div><div class="p-5 rounded-xl bg-zinc-50 border border-zinc-200 shadow-sm flex flex-col justify-between gap-4"><div class="flex items-center justify-between"><span class="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">Audit Flags</span><span class="material-symbols-outlined text-zinc-400 text-[18px]">flag</span></div><div><div class="font-mono font-bold text-2xl text-zinc-950 tracking-tight leading-none">6 Items</div><div class="flex items-center gap-1.5 mt-2"><span class="w-2 h-2 rounded-full bg-rose-500"></span><span class="text-xs text-zinc-600 font-medium">1 Disqualification blocker</span></div></div></div></div><script class="">function toggleExecutiveOverview() { const body = document.getElementById('exec-overview-body'); const chevron = document.getElementById('exec-overview-chevron'); const label = document.getElementById('exec-overview-label'); if (!body) return; if (body.classList.contains('hidden')) { body.classList.remove('hidden'); if (chevron) chevron.textContent = 'expand_less'; if (label) label.textContent = 'Collapse'; } else { body.classList.add('hidden'); if (chevron) chevron.textContent = 'expand_more'; if (label) label.textContent = 'Expand'; } }</script></section>
+</div>
+</main>
+</div>
+<script>
+function toggleInspectionCard(cardKey) {
+  const body = document.getElementById('body-' + cardKey);
+  const chevron = document.getElementById('chevron-' + cardKey);
+  if (!body || !chevron) return;
+  
+  if (body.classList.contains('hidden')) {
+    body.classList.remove('hidden');
+    chevron.textContent = 'expand_less';
+  } else {
+    body.classList.add('hidden');
+    chevron.textContent = 'expand_more';
+  }
+}
+</script>
+
+
+</body></html>

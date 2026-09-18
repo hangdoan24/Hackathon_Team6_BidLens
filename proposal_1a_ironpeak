@@ -1,0 +1,37 @@
+# Proposal — AsterWorks Maintenance Visibility Platform
+
+**Submitted by:** IronPeak Systems (fictional)
+
+## Understanding
+AsterWorks needs earlier visibility into equipment problems without disrupting the existing production-control environment. The solution must work with the current Siemens S7 estate and remain on-premise.
+
+## Solution
+- On-premise web dashboard hosted inside the AsterWorks production network.
+- Read-only connector to the existing historian and Siemens S7 data sources.
+- No PLC replacement or PLC firmware migration.
+- Machine status, active alarms, downtime history, and maintenance-priority view.
+- Role-based access for operators, maintenance engineers, and plant managers.
+- Configurable alert rules based on alarm frequency and downtime patterns.
+
+## Delivery Plan
+- Weeks 1–2: discovery, tag mapping, security review.
+- Weeks 3–6: dashboard and connector build.
+- Weeks 7–8: pilot on one production line.
+- Months 3–5: phased rollout to the remaining plants after pilot acceptance.
+
+## Support
+Year 1 support includes:
+- Critical production-impacting incidents: response within 2 hours.
+- High-priority issues: response within 8 business hours.
+- Standard issues: response within 2 business days.
+
+## Pricing
+- Integration and dashboard: €72,000
+- Pilot and rollout: €24,000
+- First-year support: €18,000
+- **Total: €114,000**
+
+## Risks & Assumptions
+- Assumes read access to the historian can be provided before Week 2.
+- PLC tag naming differs between plants and may require additional mapping.
+- Production testing will be scheduled with plant managers to avoid planned high-output periods.

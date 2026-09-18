@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-slate-50" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ProposalScorer - Scorecard &amp; Rubric | AI Copilot</title>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<!-- Tailwind Custom Configuration -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              900: '#0f172a',
+              accent: '#dc2626',
+              primary: '#111827',
+            }
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom Styles for Scrollbars and Fine Polish -->
+<style data-purpose="custom-scrollbars">
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 18px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="h-full font-sans text-slate-800 bg-[#f8fafc] flex flex-col antialiased selection:bg-slate-200">
+<!-- BEGIN: Application Shell Layout -->
+<div class="flex h-screen w-full overflow-hidden" data-purpose="app-root-container">
+<!-- BEGIN: Left Navigation Sidebar -->
+<aside class="w-64 bg-white border-r border-slate-200 flex flex-col flex-shrink-0 z-20" data-purpose="sidebar-navigation">
+<!-- Brand & Header -->
+<div class="h-16 px-5 border-b border-slate-100 flex items-center gap-3">
+<div class="w-7 h-7 rounded bg-slate-900 flex items-center justify-center text-white font-semibold text-xs tracking-tight shadow-sm">
+          PS
+        </div>
+<div>
+<h1 class="text-sm font-semibold tracking-tight text-slate-900 leading-tight">ProposalScorer</h1>
+<p class="text-[10px] text-slate-400 font-medium tracking-wide">SiviHack · FPT Europe</p>
+</div>
+</div>
+<!-- Scrollable Navigation Area -->
+<div class="flex-1 overflow-y-auto px-4 py-4 space-y-6">
+<!-- Active RFP Selector Box -->
+<div>
+<div class="bg-white border border-slate-200 rounded-lg p-3 shadow-xs hover:border-slate-300 transition-colors cursor-pointer group">
+<div class="flex items-center justify-between mb-1">
+<span class="text-[10px] font-semibold tracking-wider uppercase text-slate-400">ACTIVE RFP</span>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600 text-sm">unfold_more</span>
+</div>
+<p class="text-xs font-semibold text-slate-900 truncate">Nordframe Cloud Migration</p>
+<p class="text-[11px] text-slate-500 truncate mt-0.5">Response 1 (Weak Draft)</p>
+</div>
+</div>
+<!-- Baseline RFP Ground Truth Tag -->
+<div>
+<div class="flex items-center justify-between text-[10px] font-semibold text-slate-400 tracking-wider uppercase mb-2">
+<span class="inline-flex items-center gap-1 bg-slate-900 text-white text-[9px] px-1.5 py-0.5 rounded font-mono">
+<span class="material-symbols-outlined !text-[11px]">lock</span> BASELINE RFP
+            </span>
+<span>GROUND TRUTH</span>
+</div>
+<div class="bg-slate-50/70 border border-slate-200 rounded-lg p-2.5 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-500">article</span>
+<div>
+<p class="text-[11px] font-mono font-medium text-slate-800 leading-none">rfp_nordframe.md</p>
+<p class="text-[10px] text-slate-400 mt-0.5">Nordframe Logistics AG</p>
+</div>
+</div>
+<button class="text-slate-400 hover:text-slate-600 p-1 hover:bg-slate-100 rounded transition" title="Preview RFP">
+<span class="material-symbols-outlined text-base">visibility</span>
+</button>
+</div>
+</div>
+<!-- Sample Versions Menu -->
+<div>
+<span class="text-[10px] font-semibold uppercase text-slate-400 tracking-wider block mb-2 px-1">SAMPLE VERSIONS</span>
+<div class="space-y-1">
+<a class="flex items-center justify-between px-3 py-2 text-xs font-medium rounded-md bg-slate-900 text-white shadow-xs" href="#">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-rose-500 ring-2 ring-rose-400/40"></span>
+<span>Sample 1 (Weak)</span>
+</div>
+<span class="font-mono text-[11px] font-semibold text-slate-200">42%</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 text-xs font-medium rounded-md text-slate-600 hover:bg-slate-100/80 transition-colors" href="#">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+<span>Sample 2 (Medium)</span>
+</div>
+<span class="font-mono text-[11px] text-slate-400">71%</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 text-xs font-medium rounded-md text-slate-600 hover:bg-slate-100/80 transition-colors" href="#">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+<span>Sample 3 (Strong)</span>
+</div>
+<span class="font-mono text-[11px] text-slate-400">89%</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 text-xs font-medium rounded-md text-slate-600 hover:bg-slate-100/80 transition-colors" href="#">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+<span>Sample 4 (Overpromise)</span>
+</div>
+<span class="font-mono text-[10px] uppercase font-semibold text-rose-600 bg-rose-50 px-1 rounded">Risk</span>
+</a>
+</div>
+</div>
+<!-- Workspace Nav Links -->
+<div>
+<span class="text-[10px] font-semibold uppercase text-slate-400 tracking-wider block mb-2 px-1">WORKSPACE</span>
+<nav class="space-y-0.5">
+<a class="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold rounded-md bg-slate-100 text-slate-900" href="#">
+<span class="material-symbols-outlined text-slate-800 text-[17px]">fact_check</span>
+<span>Scorecard &amp; Rubric</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-md text-slate-600 hover:bg-slate-100/70 hover:text-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-400 text-[17px]">vertical_split</span>
+<span>Dual-Pane Review</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-md text-slate-600 hover:bg-slate-100/70 hover:text-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-400 text-[17px]">grid_view</span>
+<span>Requirements Matrix</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-md text-slate-600 hover:bg-slate-100/70 hover:text-slate-900 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-400 text-[17px]">summarize</span>
+<span>Export &amp; Pitch Report</span>
+</a>
+</nav>
+</div>
+</div>
+<!-- User Profile Footer in Sidebar -->
+<div class="p-3 border-t border-slate-100 bg-slate-50/50">
+<div class="flex items-center gap-3 px-2 py-1.5">
+<div class="w-8 h-8 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center text-slate-600 font-semibold text-xs">
+<span class="material-symbols-outlined text-sm">person</span>
+</div>
+<div class="min-w-0 flex-1">
+<p class="text-xs font-semibold text-slate-900 truncate">Dr. Florian Weber</p>
+<p class="text-[10px] text-slate-500 truncate">Lead Presales · DACH</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- END: Left Navigation Sidebar -->
+<!-- BEGIN: Main Dashboard Content Area -->
+<div class="flex-1 flex flex-col min-w-0 overflow-hidden" data-purpose="primary-evaluator-canvas">
+<!-- BEGIN: Top Context Bar -->
+<header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between flex-shrink-0 z-10">
+<!-- Breadcrumb / Context Metadata -->
+<div class="flex items-center gap-2.5 text-xs text-slate-500">
+<span class="font-semibold text-slate-900">Nordframe Logistics AG</span>
+<span class="text-slate-300">/</span>
+<span class="text-slate-600">Sample 1 Assessment</span>
+<span class="text-slate-300">•</span>
+<span class="text-slate-400 font-mono text-[11px]">Budget: €450,000 max · 16 Wks Target</span>
+</div>
+<!-- Top Right Action Controls -->
+<div class="flex items-center gap-3">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[11px] font-medium border border-slate-200">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+<span>AI Evaluator v2.4</span>
+</div>
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-medium hover:bg-indigo-100 transition-colors shadow-2xs" id="toggleCopilotBtn">
+<span class="material-symbols-outlined text-base">smart_toy</span>
+<span>BidLens Copilot</span>
+<span class="w-1.5 h-1.5 rounded-full bg-indigo-600 ml-0.5"></span>
+</button>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-slate-900 hover:bg-black text-white text-xs font-semibold shadow-sm transition">
+<span class="material-symbols-outlined text-sm">ios_share</span>
+<span>Export Summary</span>
+</button>
+</div>
+</header>
+<!-- END: Top Context Bar -->
+<!-- BEGIN: Core Content Two-Column Body -->
+<main class="flex-1 overflow-y-auto p-6 space-y-6" data-purpose="scrollable-evaluation-content">
+<!-- Top Score Banner & Metric Cards -->
+<section class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex flex-wrap lg:flex-nowrap items-center justify-between gap-6" data-purpose="scorecard-overview-banner">
+<!-- Large Grade Badge + Title -->
+<div class="flex items-center gap-5 min-w-[320px]">
+<div class="w-20 h-20 rounded-xl border border-slate-200 bg-slate-50/70 flex flex-col items-center justify-center text-center shadow-2xs">
+<span class="text-3xl font-bold font-mono tracking-tight text-slate-900 leading-none">42</span>
+<span class="text-[9px] uppercase tracking-wider text-slate-400 font-semibold mt-1">GRADE C</span>
+</div>
+<div>
+<div class="inline-flex items-center gap-1 text-[11px] font-bold tracking-wide uppercase text-rose-600 bg-rose-50 px-2 py-0.5 rounded mb-1">
+<span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span>
+<span>DISQUALIFICATION RISK</span>
+</div>
+<h2 class="text-lg font-semibold text-slate-900 tracking-tight">Nordframe Cloud Migration · Weak Draft Assessment</h2>
+</div>
+</div>
+<!-- KPI Metric Pill Counters -->
+<div class="flex flex-wrap items-center gap-3">
+<!-- Coverage Metric -->
+<div class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 flex items-center gap-3 min-w-[140px]">
+<span class="material-symbols-outlined text-slate-400 text-xl">fact_check</span>
+<div>
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block leading-none">COVERAGE</span>
+<span class="text-sm font-semibold font-mono text-slate-800">5/18 <span class="text-xs text-slate-400 font-normal">(28%)</span></span>
+</div>
+</div>
+<!-- Commercial Risk Metric -->
+<div class="bg-rose-50/50 border border-rose-200/80 rounded-lg px-4 py-2.5 flex items-center gap-3 min-w-[155px]">
+<span class="material-symbols-outlined text-rose-600 text-xl">trending_down</span>
+<div>
+<span class="text-[10px] font-bold uppercase tracking-wider text-rose-600 block leading-none">COMMERCIAL RISK</span>
+<span class="text-xs font-bold font-mono text-rose-700">Uncapped T&amp;M</span>
+</div>
+</div>
+<!-- Audit Flags Metric -->
+<div class="bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5 flex items-center gap-3 min-w-[130px]">
+<span class="material-symbols-outlined text-slate-400 text-xl">flag</span>
+<div>
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block leading-none">AUDIT FLAGS</span>
+<span class="text-sm font-semibold font-mono text-slate-800">6 Items</span>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-1.5 pl-2 border-l border-slate-200">
+<button class="p-2 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition" title="Compare version">
+<span class="material-symbols-outlined text-base">copy_all</span>
+</button>
+<button class="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold rounded-lg shadow-2xs transition">
+<span class="material-symbols-outlined text-sm">refresh</span>
+<span>Re-Evaluate</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Disqualification Callout Bar -->
+<section class="bg-rose-50/60 border border-rose-200 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4" data-purpose="disqualification-callout">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center text-rose-700 flex-shrink-0">
+<span class="material-symbols-outlined text-lg">error</span>
+</div>
+<div>
+<span class="text-xs font-bold tracking-wider uppercase text-rose-700 mr-2">DISQUALIFICATION BLOCKER:</span>
+<span class="text-xs font-medium text-rose-950">Breaches commercial clause 4.1 (<code class="bg-rose-100 text-rose-900 px-1 py-0.5 rounded font-mono text-[11px]">Uncapped T&amp;M model</code>) and omits mandatory Disaster Recovery rollback annex.</span>
+</div>
+</div>
+<button class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-xs whitespace-nowrap">
+            Presales Action Required
+          </button>
+</section>
+<!-- Main Workspace Grid: Rubric Dimensions (Left) & Evaluator Verdict (Right) -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start" data-purpose="evaluation-main-grid">
+<!-- LEFT 8-COLS: RUBRIC CRITERIA BREAKDOWN -->
+<div class="xl:col-span-8 space-y-4" data-purpose="rubric-criteria-list">
+<!-- Rubric Header Bar -->
+<div class="flex items-center justify-between pb-1">
+<div class="flex items-center gap-2">
+<h3 class="text-xs font-bold uppercase tracking-wider text-slate-900">RUBRIC CRITERIA BREAKDOWN</h3>
+<span class="text-xs font-medium text-slate-400">(8 Dimensions · 1.0 – 5.0)</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-slate-600 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition">
+<span class="material-symbols-outlined text-xs">tune</span>
+<span>Weights</span>
+</button>
+<button class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-white bg-slate-900 rounded-md hover:bg-black transition">
+<span class="material-symbols-outlined text-xs">add</span>
+<span>Add Criterion</span>
+</button>
+</div>
+</div>
+<!-- Criterion 01: Problem Understanding -->
+<article class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs hover:border-slate-300 transition" data-purpose="criterion-item">
+<div class="flex items-start justify-between gap-4">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-mono text-xs font-semibold text-slate-400">01.</span>
+<h4 class="text-xs font-semibold text-slate-900">Problem Understanding &amp; Context</h4>
+</div>
+<p class="text-xs text-slate-500 leading-relaxed pl-6">
+                    Deficiency: Generic freight boilerplate; omits required 45ms intra-DACH warehouse throughput mandate.
+                  </p>
+</div>
+<div class="flex items-center gap-4 flex-shrink-0">
+<span class="text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded text-center">Partial Match</span>
+<div class="flex items-center gap-2">
+<div class="w-14 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+<div class="bg-slate-600 h-1.5 rounded-full" style="width: 50%"></div>
+</div>
+<span class="font-mono text-xs font-bold text-slate-800 w-6 text-right">2.5</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Criterion 02: Scope & Deliverables Clarity -->
+<article class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs hover:border-slate-300 transition" data-purpose="criterion-item">
+<div class="flex items-start justify-between gap-4">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-mono text-xs font-semibold text-slate-400">02.</span>
+<h4 class="text-xs font-semibold text-slate-900">Scope &amp; Deliverables Clarity</h4>
+</div>
+<p class="text-xs text-slate-500 leading-relaxed pl-6">
+                    Deficiency: Conflates discovery with cutover; acceptance gates (M0-M5) undefined.
+                  </p>
+</div>
+<div class="flex items-center gap-4 flex-shrink-0">
+<span class="text-[11px] font-medium text-amber-700 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded text-center">Ambiguous</span>
+<div class="flex items-center gap-2">
+<div class="w-14 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+<div class="bg-slate-600 h-1.5 rounded-full" style="width: 40%"></div>
+</div>
+<span class="font-mono text-xs font-bold text-slate-800 w-6 text-right">2.0</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Criterion 03: Pricing Clarity & Commercials (BREACH) -->
+<article class="bg-rose-50/40 border border-rose-300 rounded-xl p-4 shadow-xs ring-1 ring-rose-200" data-purpose="criterion-item-breach">
+<div class="flex items-start justify-between gap-4">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-mono text-xs font-bold text-rose-600">03.</span>
+<h4 class="text-xs font-bold text-rose-900">Pricing Clarity &amp; Commercials</h4>
+<span class="text-[10px] font-bold uppercase bg-rose-600 text-white px-1.5 py-0.2 rounded">BREACH</span>
+</div>
+<p class="text-xs font-medium text-rose-700 leading-relaxed pl-6">
+                    Critical Breach: Rates quoted "on request" under pure T&amp;M; rejects RFP mandatory €450k NTE ceiling.
+                  </p>
+</div>
+<div class="flex items-center gap-4 flex-shrink-0">
+<span class="text-[11px] font-bold text-rose-700 bg-rose-100 border border-rose-200 px-2 py-0.5 rounded text-center">Uncapped T&amp;M</span>
+<div class="flex items-center gap-2">
+<div class="w-14 bg-rose-100 rounded-full h-1.5 overflow-hidden">
+<div class="bg-rose-600 h-1.5 rounded-full" style="width: 20%"></div>
+</div>
+<span class="font-mono text-xs font-bold text-rose-700 w-6 text-right">1.0</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Criterion 04: Timeline & Project Governance -->
+<article class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs hover:border-slate-300 transition" data-purpose="criterion-item">
+<div class="flex items-start justify-between gap-4">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-mono text-xs font-semibold text-slate-400">04.</span>
+<h4 class="text-xs font-semibold text-slate-900">Timeline &amp; Project Governance</h4>
+</div>
+<p class="text-xs text-slate-500 leading-relaxed pl-6">
+                    Deficiency: Evasive "in due course" phrasing; no 16-week sprint Gantt or dry-run failover calendar.
+                  </p>
+</div>
+<div class="flex items-center gap-4 flex-shrink-0">
+<span class="text-[11px] font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded text-center">Uncertain</span>
+<div class="flex items-center gap-2">
+<div class="w-14 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+<div class="bg-slate-600 h-1.5 rounded-full" style="width: 30%"></div>
+</div>
+<span class="font-mono text-xs font-bold text-slate-800 w-6 text-right">1.5</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Criterion 05: Completeness vs RFP Requirements -->
+<article class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs hover:border-slate-300 transition" data-purpose="criterion-item">
+<div class="flex items-start justify-between gap-4">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-mono text-xs font-semibold text-slate-400">05.</span>
+<h4 class="text-xs font-semibold text-slate-900">Completeness vs RFP Requirements</h4>
+</div>
+<p class="text-xs text-slate-500 leading-relaxed pl-6">
+                    Deficiency: Omits Annex D (Rollback / DR plan) and Annex F (Subcontractors).
+                  </p>
+</div>
+<div class="flex items-center gap-4 flex-shrink-0">
+<span class="text-[11px] font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded text-center">Missing Annexes</span>
+<div class="flex items-center gap-2">
+<div class="w-14 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+<div class="bg-slate-600 h-1.5 rounded-full" style="width: 40%"></div>
+</div>
+<span class="font-mono text-xs font-bold text-slate-800 w-6 text-right">2.0</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Criterion 06: Tone, Value Proposition & Proof -->
+<article class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs hover:border-slate-300 transition" data-purpose="criterion-item">
+<div class="flex items-start justify-between gap-4">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-mono text-xs font-semibold text-slate-400">06.</span>
+<h4 class="text-xs font-semibold text-slate-900">Tone, Value Proposition &amp; Proof</h4>
+</div>
+<p class="text-xs text-slate-500 leading-relaxed pl-6">
+                    Deficiency: Generic marketing claims. Missing two verified DACH logistics references &amp; BaFin certifications.
+                  </p>
+</div>
+<div class="flex items-center gap-4 flex-shrink-0">
+<span class="text-[11px] font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded text-center">Boilerplate</span>
+<div class="flex items-center gap-2">
+<div class="w-14 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+<div class="bg-slate-600 h-1.5 rounded-full" style="width: 60%"></div>
+</div>
+<span class="font-mono text-xs font-bold text-slate-800 w-6 text-right">3.0</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Criterion 07: Risk & Assumptions Transparency -->
+<article class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs hover:border-slate-300 transition" data-purpose="criterion-item">
+<div class="flex items-start justify-between gap-4">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-mono text-xs font-semibold text-slate-400">07.</span>
+<h4 class="text-xs font-semibold text-slate-900">Risk &amp; Assumptions Transparency</h4>
+</div>
+<p class="text-xs text-slate-500 leading-relaxed pl-6">
+                    Deficiency: Assumes unannounced 12-hour offline window for ERP indexing, directly violating zero-downtime SLA.
+                  </p>
+</div>
+<div class="flex items-center gap-4 flex-shrink-0">
+<span class="text-[11px] font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded text-center">Unstated Window</span>
+<div class="flex items-center gap-2">
+<div class="w-14 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+<div class="bg-slate-600 h-1.5 rounded-full" style="width: 20%"></div>
+</div>
+<span class="font-mono text-xs font-bold text-slate-800 w-6 text-right">1.0</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Criterion 08: Data Sovereignty & BaFin Compliance -->
+<article class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs hover:border-slate-300 transition" data-purpose="criterion-item">
+<div class="flex items-start justify-between gap-4">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-mono text-xs font-semibold text-slate-400">08.</span>
+<h4 class="text-xs font-semibold text-slate-900">Data Sovereignty &amp; BaFin Compliance</h4>
+<span class="text-[10px] font-mono bg-slate-100 text-slate-600 px-1.5 py-0.2 rounded">Custom</span>
+</div>
+<p class="text-xs text-slate-500 leading-relaxed pl-6">
+                    Deficiency: Response references US-East cloud instances as primary backup; lacks explicit Frankfurt localized tenancy guarantee.
+                  </p>
+</div>
+<div class="flex items-center gap-4 flex-shrink-0">
+<span class="text-[11px] font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded text-center">Partial Match</span>
+<div class="flex items-center gap-2">
+<div class="w-14 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+<div class="bg-slate-600 h-1.5 rounded-full" style="width: 50%"></div>
+</div>
+<span class="font-mono text-xs font-bold text-slate-800 w-6 text-right">2.5</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Bottom Custom Rule Trigger Footer -->
+<div class="bg-slate-50/80 border border-dashed border-slate-200 rounded-xl p-3.5 flex items-center justify-between">
+<div class="flex items-center gap-2 text-xs text-slate-600">
+<span class="material-symbols-outlined text-slate-400">library_add</span>
+<span>Need to evaluate specific clauses or compliance standards?</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-xs font-medium px-3 py-1.5 bg-white border border-slate-200 rounded-md hover:bg-slate-50 transition text-slate-700">Import RFP Rule</button>
+<button class="text-xs font-semibold px-3 py-1.5 bg-slate-900 rounded-md text-white hover:bg-black transition">+ Add Custom</button>
+</div>
+</div>
+</div>
+<!-- RIGHT 4-COLS: LEAD EVALUATOR VERDICT & REMEDIATION -->
+<div class="xl:col-span-4 space-y-4" data-purpose="evaluator-verdict-column">
+<!-- Lead Evaluator Verdict Card -->
+<div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-4">
+<div class="flex items-center justify-between border-b border-slate-100 pb-3">
+<h3 class="text-xs font-bold uppercase tracking-wider text-slate-900">LEAD EVALUATOR VERDICT</h3>
+<span class="text-[11px] font-semibold text-slate-400">DACH Presales</span>
+</div>
+<!-- Verdict Item 1 -->
+<div class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-sm">cancel</span>
+</div>
+<div>
+<h4 class="text-xs font-bold text-slate-900">Immediate Rejection Risk</h4>
+<p class="text-[11px] text-slate-500 mt-0.5 leading-normal">Violates RFP §4.1 binding ceiling requirement</p>
+</div>
+</div>
+<!-- Verdict Item 2 -->
+<div class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-sm">warning</span>
+</div>
+<div>
+<h4 class="text-xs font-bold text-slate-900">Missing Rollback Annex D</h4>
+<p class="text-[11px] text-slate-500 mt-0.5 leading-normal">Prerequisite for technical progression</p>
+</div>
+</div>
+<!-- Verdict Item 3 -->
+<div class="flex items-start gap-3">
+<div class="w-6 h-6 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+</div>
+<div>
+<h4 class="text-xs font-bold text-slate-900">Resubmission Target: Grade B (70+)</h4>
+<p class="text-[11px] text-slate-500 mt-0.5 leading-normal">Address 3 priority fixes below (~4 hours effort)</p>
+</div>
+</div>
+</div>
+<!-- Top 3 Priority Fixes Card -->
+<div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-4">
+<div class="flex items-center justify-between border-b border-slate-100 pb-3">
+<h3 class="text-xs font-bold uppercase tracking-wider text-slate-900">TOP 3 PRIORITY FIXES</h3>
+<span class="text-[10px] font-mono font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">ACTIONABLE</span>
+</div>
+<div class="space-y-3.5">
+<!-- Fix 1 -->
+<div class="flex items-start gap-3">
+<div class="w-5 h-5 rounded-full bg-slate-900 text-white font-mono text-[11px] font-semibold flex items-center justify-center flex-shrink-0 mt-0.5">1</div>
+<div>
+<h5 class="text-xs font-semibold text-slate-900">Cap Pricing at €430k NTE</h5>
+<p class="text-[11px] text-slate-500 mt-0.5 leading-normal">Discovery (€65k), Cutover (€285k), Hypercare (€80k).</p>
+</div>
+</div>
+<!-- Fix 2 -->
+<div class="flex items-start gap-3">
+<div class="w-5 h-5 rounded-full bg-slate-900 text-white font-mono text-[11px] font-semibold flex items-center justify-center flex-shrink-0 mt-0.5">2</div>
+<div>
+<h5 class="text-xs font-semibold text-slate-900">Define 8 Bi-Weekly Sprints</h5>
+<p class="text-[11px] text-slate-500 mt-0.5 leading-normal">Replace open-ended schedules with 16-week timeline.</p>
+</div>
+</div>
+<!-- Fix 3 -->
+<div class="flex items-start gap-3">
+<div class="w-5 h-5 rounded-full bg-slate-900 text-white font-mono text-[11px] font-semibold flex items-center justify-center flex-shrink-0 mt-0.5">3</div>
+<div>
+<h5 class="text-xs font-semibold text-slate-900">Append Annex D Rollback Spec</h5>
+<p class="text-[11px] text-slate-500 mt-0.5 leading-normal">Guarantee &lt;45 min DB rollback window via AWS DMS.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Revision Snippet Card -->
+<div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-xs font-semibold text-slate-900">
+<span class="material-symbols-outlined text-indigo-600 text-sm">auto_fix_high</span>
+<span>AI REVISION SNIPPET</span>
+</div>
+<button class="text-xs font-medium text-slate-500 hover:text-slate-800 flex items-center gap-1 transition" title="Copy to clipboard">
+<span class="material-symbols-outlined text-xs">content_copy</span>
+<span>Copy</span>
+</button>
+</div>
+<span class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 block">COMPLIANT CLAUSE (RFP §4.1)</span>
+<div class="bg-slate-50 border border-slate-200 rounded-lg p-3 font-mono text-[11px] text-slate-700 leading-relaxed select-all">
+                "FPT commits to a Firm-Fixed Price ceiling not to exceed €430,000 across 3 phases (Discovery €65k, Execution €285k, Hypercare €80k), governed by pre-agreed milestone gates."
+              </div>
+</div>
+</div>
+</div>
+<!-- Benchmark Evaluation Engine Section (Bottom) -->
+<section class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-4" data-purpose="benchmark-comparison-engine">
+<div class="flex flex-wrap items-center justify-between gap-4 pb-2 border-b border-slate-100">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700">
+<span class="material-symbols-outlined text-lg">trending_up</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">BENCHMARK EVALUATION ENGINE</h4>
+<span class="text-[10px] font-mono bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">Appendix B</span>
+</div>
+<p class="text-xs text-slate-500 mt-0.5">Automated scoring of Appendix B sample proposals against rfp_nordframe.md baseline</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="inline-flex items-center gap-2 bg-slate-100 rounded-full px-3 py-1 font-mono text-xs text-slate-600">
+<span class="w-2 h-2 rounded-full bg-rose-500"></span>
+<span>Active: Sample 1 (Weak Draft)</span>
+</div>
+<button class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-slate-900 text-white rounded-lg text-xs font-semibold hover:bg-black transition shadow-xs">
+<span class="material-symbols-outlined text-sm">compare</span>
+<span>Compare All 4 Samples</span>
+</button>
+</div>
+</div>
+<!-- 4 Comparison Cards Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
+<!-- Sample 1 (Active) -->
+<div class="bg-slate-900 text-white rounded-xl p-4 shadow-sm border border-slate-800 relative flex flex-col justify-between h-32">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-rose-500"></span>
+<span class="text-xs font-semibold text-white">Sample 1 (Weak)</span>
+</div>
+<span class="text-[9px] font-mono font-bold tracking-wider uppercase bg-slate-800 text-rose-300 border border-rose-500/30 px-1.5 py-0.5 rounded">ACTIVE</span>
+</div>
+<div class="flex items-baseline justify-between mt-auto">
+<span class="text-3xl font-mono font-bold text-white tracking-tight">42%</span>
+<span class="text-xs font-mono font-medium text-rose-400">-58% baseline</span>
+</div>
+</div>
+<!-- Sample 2 -->
+<div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs hover:border-slate-300 transition flex flex-col justify-between h-32">
+<div>
+<span class="text-xs font-semibold text-slate-900">Sample 2 (Medium)</span>
+</div>
+<div class="flex items-baseline justify-between mt-auto">
+<span class="text-3xl font-mono font-bold text-slate-800 tracking-tight">71%</span>
+<span class="text-xs font-mono font-medium text-slate-400">-29% baseline</span>
+</div>
+</div>
+<!-- Sample 3 -->
+<div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs hover:border-slate-300 transition flex flex-col justify-between h-32">
+<div>
+<span class="text-xs font-semibold text-slate-900">Sample 3 (Strong)</span>
+</div>
+<div class="flex items-baseline justify-between mt-auto">
+<span class="text-3xl font-mono font-bold text-slate-800 tracking-tight">89%</span>
+<span class="text-xs font-mono font-medium text-emerald-600">-11% baseline</span>
+</div>
+</div>
+<!-- Sample 4 -->
+<div class="bg-white border border-slate-200 rounded-xl p-4 shadow-2xs hover:border-slate-300 transition flex flex-col justify-between h-32">
+<div>
+<span class="text-xs font-semibold text-slate-900">Sample 4 (Overpromise)</span>
+</div>
+<div class="flex items-baseline justify-between mt-auto">
+<span class="text-3xl font-mono font-bold text-slate-800 tracking-tight">54%</span>
+<span class="text-xs font-mono font-medium text-rose-600">-46% baseline</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- END: Core Content Two-Column Body -->
+</div>
+<!-- END: Main Dashboard Content Area -->
+<!-- BEGIN: Integrated AI Copilot Drawer (BidLens AI Assistant) -->
+<aside class="w-[430px] bg-white border-l border-slate-200 flex flex-col flex-shrink-0 shadow-xl transition-all duration-300 z-30" data-purpose="ai-copilot-assistant-panel" id="aiCopilotDrawer">
+<!-- Copilot Header -->
+<div class="h-16 px-4 bg-white border-b border-slate-200 flex items-center justify-between flex-shrink-0">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-indigo-600 to-violet-600 text-white flex items-center justify-center shadow-xs flex-shrink-0">
+<span class="material-symbols-outlined text-sm">smart_toy</span>
+</div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<h3 class="text-xs font-bold text-slate-900 tracking-tight truncate">BidLens AI Copilot</h3>
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+</div>
+<p class="text-[10px] text-slate-400 font-mono">v2.4 · RFP Precision Auditor</p>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-1.5 text-slate-400 hover:text-slate-600 rounded-md hover:bg-slate-100 transition" title="Clear conversation">
+<span class="material-symbols-outlined text-base">restart_alt</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-slate-600 rounded-md hover:bg-slate-100 transition" id="closeCopilotBtn" title="Collapse Copilot">
+<span class="material-symbols-outlined text-base">dock_to_right</span>
+</button>
+</div>
+</div>
+<!-- Active Context Indicator Bar -->
+<div class="px-4 py-2 bg-indigo-50/50 border-b border-indigo-100/70 flex items-center justify-between text-[11px]">
+<div class="flex items-center gap-1.5 text-indigo-900 font-medium truncate">
+<span class="material-symbols-outlined text-indigo-600 text-sm">pin_drop</span>
+<span class="truncate">Context: Nordframe RFP · Sample 1 (Weak)</span>
+</div>
+<span class="font-mono text-[10px] bg-white border border-indigo-200 text-indigo-700 px-1.5 py-0.5 rounded font-semibold flex-shrink-0">Strict Mode</span>
+</div>
+<!-- Copilot Chat Stream -->
+<div class="flex-1 overflow-y-auto p-4 space-y-4 text-xs" data-purpose="chat-message-history">
+<!-- Evaluator User Question 1 -->
+<div class="flex flex-col items-end gap-1">
+<div class="bg-slate-900 text-white rounded-2xl rounded-tr-xs px-3.5 py-2.5 max-w-[88%] shadow-xs leading-relaxed">
+            Tại sao tiêu chí Commercials &amp; Pricing chỉ đạt 1.0 và bị đánh dấu Disqualification Risk?
+          </div>
+<span class="text-[10px] font-mono text-slate-400 mr-1">14:32 · Florian W.</span>
+</div>
+<!-- AI Assistant Answer 1 -->
+<div class="flex items-start gap-2.5">
+<div class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs flex-shrink-0 mt-0.5 shadow-2xs">
+<span class="material-symbols-outlined text-[13px]">smart_toy</span>
+</div>
+<div class="flex-1 space-y-2">
+<div class="bg-slate-50 border border-slate-200 rounded-2xl rounded-tl-xs p-3.5 space-y-2 text-slate-700 leading-relaxed">
+<p>
+                Bản nháp <strong>Sample 1</strong> vi phạm trực tiếp <code class="font-mono bg-white px-1 py-0.5 border border-slate-200 rounded text-rose-700 text-[11px]">RFP §4.1 (Mandatory Pricing Cap)</code>:
+              </p>
+<ul class="list-disc pl-4 space-y-1 text-slate-600 text-[11.5px]">
+<li><strong>Vi phạm trần giá:</strong> Nordframe quy định mức trần tuyệt đối <strong>€450,000 Not-To-Exceed (NTE)</strong>. Đơn vị phản hồi với hình thức <em>Time &amp; Materials (T&amp;M) mở</em> và ghi <em>"Rates quoted on request"</em>.</li>
+<li><strong>Mức độ rủi ro:</strong> Theo quy chế chấm thầu DACH, hành vi từ chối hoặc mập mờ mức giá trần bắt buộc sẽ kích hoạt điều khoản <strong>loại trực tiếp (Automatic Disqualification)</strong> ngay tại vòng sơ khảo tài chính.</li>
+</ul>
+</div>
+<!-- Action Suggestion Box -->
+<div class="bg-white border border-indigo-200 rounded-xl p-3 shadow-2xs space-y-2">
+<div class="flex items-center gap-1.5 text-indigo-950 font-semibold text-[11px]">
+<span class="material-symbols-outlined text-indigo-600 text-sm">tips_and_updates</span>
+<span>Khuyến nghị xử lý tức thì</span>
+</div>
+<p class="text-[11px] text-slate-600 leading-normal">
+                Chuyển đổi sang cấu trúc trần cố định Firm-Fixed Price <strong>€430,000</strong> phân bổ theo 3 mốc (Milestone-based) để vừa an toàn biên lợi nhuận, vừa đạt điểm tối đa tuân thủ.
+              </p>
+<div class="flex flex-wrap gap-1.5 pt-1">
+<button class="inline-flex items-center gap-1 text-[10px] font-semibold bg-indigo-600 text-white px-2.5 py-1 rounded hover:bg-indigo-700 transition">
+<span class="material-symbols-outlined !text-[12px]">check</span> Áp dụng vào nháp
+                </button>
+<button class="text-[10px] font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 px-2 py-1 rounded transition">
+                  Soạn thảo lại điều khoản
+                </button>
+<button class="text-[10px] font-medium text-slate-500 hover:text-slate-800 px-2 py-1 rounded transition">
+                  Xem trích dẫn RFP §4.1
+                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Evaluator Follow-up -->
+<div class="flex flex-col items-end gap-1 pt-1">
+<div class="bg-slate-900 text-white rounded-2xl rounded-tr-xs px-3.5 py-2.5 max-w-[88%] shadow-xs leading-relaxed">
+            Viết lại điều khoản cứu vãn điều khoản 4.1 và bổ sung cam kết SLA 45ms intra-DACH.
+          </div>
+<span class="text-[10px] font-mono text-slate-400 mr-1">14:34 · Florian W.</span>
+</div>
+<!-- AI Assistant Answer 2 with Code snippet -->
+<div class="flex items-start gap-2.5">
+<div class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs flex-shrink-0 mt-0.5 shadow-2xs">
+<span class="material-symbols-outlined text-[13px]">smart_toy</span>
+</div>
+<div class="flex-1 space-y-2">
+<div class="bg-slate-50 border border-slate-200 rounded-2xl rounded-tl-xs p-3.5 space-y-2.5 text-slate-700">
+<p class="text-[11.5px] leading-relaxed">
+                Đã chuẩn hóa điều khoản theo chuẩn hợp đồng Presales DACH với cam kết độ trễ kiến trúc:
+              </p>
+<!-- Code block -->
+<div class="relative bg-slate-900 rounded-lg p-3 text-slate-100 font-mono text-[11px] leading-relaxed group">
+<button class="absolute top-2 right-2 text-slate-400 hover:text-white p-1 rounded bg-slate-800 transition" title="Copy code">
+<span class="material-symbols-outlined !text-[13px]">content_copy</span>
+</button>
+<div class="text-slate-400 text-[10px] pb-1 border-b border-slate-800 mb-1.5">// Clause 4.1 &amp; 7.2 Compliant Revision</div>
+<span class="text-emerald-400">"FPT commits to a Firm-Fixed Price ceiling</span> not to exceed <span class="text-amber-300">€430,000</span> across 3 phases (Discovery €65k, Execution €285k, Hypercare €80k). Additionally, network routing guarantees <span class="text-indigo-300">intra-DACH latency ≤ 45ms</span> utilizing Frankfurt AWS eu-central-1 dedicated clusters."
+              </div>
+<div class="flex items-center justify-between text-[11px] pt-1">
+<span class="text-emerald-600 font-medium flex items-center gap-1">
+<span class="material-symbols-outlined !text-[13px]">check_circle</span> Phù hợp 100% tiêu chí RFP
+                </span>
+<button class="text-indigo-600 hover:text-indigo-800 font-semibold text-[11px] underline">Chèn vào báo cáo</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Action Prompt Pills -->
+<div class="px-4 py-2 border-t border-slate-100 bg-slate-50/50 flex items-center gap-1.5 overflow-x-auto text-[11px]">
+<button class="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-full whitespace-nowrap text-slate-700 transition">
+          💡 Giải thích điểm thấp
+        </button>
+<button class="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-full whitespace-nowrap text-slate-700 transition">
+          ⚡ Đề xuất sửa nhanh
+        </button>
+<button class="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-full whitespace-nowrap text-slate-700 transition">
+          🛡️ Kiểm tra BaFin
+        </button>
+<button class="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-full whitespace-nowrap text-slate-700 transition">
+          ⚖️ So với Sample 3
+        </button>
+</div>
+<!-- Copilot Chat Input Bar -->
+<div class="p-3.5 bg-white border-t border-slate-200" data-purpose="chat-input-controls">
+<form class="relative bg-slate-50 border border-slate-200 rounded-xl focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500 focus-within:bg-white transition-all shadow-2xs" onsubmit="event.preventDefault();">
+<textarea class="w-full bg-transparent border-0 resize-none text-xs text-slate-800 placeholder:text-slate-400 p-3 focus:ring-0 focus:outline-none" placeholder="Hỏi AI về tiêu chí chấm điểm, yêu cầu viết lại điều khoản, hoặc đối chiếu RFP..." rows="2"></textarea>
+<div class="flex items-center justify-between px-2.5 pb-2">
+<div class="flex items-center gap-1">
+<button class="p-1.5 text-slate-400 hover:text-slate-600 rounded hover:bg-slate-200/60 transition" title="Attach document reference" type="button">
+<span class="material-symbols-outlined !text-[16px]">attach_file</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-slate-600 rounded hover:bg-slate-200/60 transition" title="Voice dictation" type="button">
+<span class="material-symbols-outlined !text-[16px]">mic</span>
+</button>
+<span class="text-[10px] font-mono text-slate-400 ml-1">RFP v1.2</span>
+</div>
+<button class="w-7 h-7 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center shadow-xs transition" type="submit">
+<span class="material-symbols-outlined !text-[14px]">arrow_upward</span>
+</button>
+</div>
+</form>
+<p class="text-[10px] text-center text-slate-400 mt-2 font-mono">BidLens Neural Engine · Verified against Nordframe RFP baseline</p>
+</div>
+</aside>
+<!-- END: Integrated AI Copilot Drawer -->
+</div>
+<!-- END: Application Shell Layout -->
+<!-- JavaScript for Copilot Panel Interaction -->
+<script data-purpose="copilot-drawer-controller">
+    const drawer = document.getElementById('aiCopilotDrawer');
+    const toggleBtn = document.getElementById('toggleCopilotBtn');
+    const closeBtn = document.getElementById('closeCopilotBtn');
+
+    function toggleCopilot() {
+      if (drawer.classList.contains('hidden')) {
+        drawer.classList.remove('hidden');
+        drawer.classList.add('flex');
+      } else {
+        drawer.classList.add('hidden');
+        drawer.classList.remove('flex');
+      }
+    }
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', toggleCopilot);
+    }
+    if (closeBtn) {
+      closeBtn.addEventListener('click', toggleCopilot);
+    }
+  </script>
+</body></html>

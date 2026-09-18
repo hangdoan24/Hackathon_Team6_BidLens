@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BidLens — AI-Powered Proposal Evaluation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = { theme: { extend: { fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] } } } }
+  </script>
+  <style>
+    .bg-grid-pattern { background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 32px 32px; }
+  </style>
+</head>
+<body class="min-h-full antialiased flex flex-col justify-between selection:bg-neutral-800 selection:text-white relative bg-gradient-to-b from-black via-zinc-900 via-50% to-white" style="font-family:'Plus Jakarta Sans', Inter, sans-serif">
+
+  <header class="w-full border-b border-white/10 px-6 sm:px-12 py-4 flex items-center justify-between z-20 backdrop-blur-md bg-black/40 sticky top-0">
+    <div class="flex items-center gap-3.5">
+      <div class="w-8 h-8 bg-white text-slate-950 flex items-center justify-center font-extrabold text-sm border border-white/30 shadow-sm tracking-tight rounded-full">B</div>
+      <span class="font-extrabold text-white tracking-tight text-[15px]">BidLens</span>
+    </div>
+  </header>
+
+  <main class="relative flex-1 flex flex-col items-center justify-center px-6 py-20 sm:py-28 text-center overflow-hidden">
+    <div class="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none -z-10 [mask-image:radial-gradient(ellipse_70%_60%_at_50%_30%,#fff_20%,transparent_80%)]"></div>
+    <div class="relative max-w-3xl mx-auto flex flex-col items-center z-10">
+      <h1 class="text-5xl sm:text-7xl font-extrabold tracking-[-0.035em] text-white mb-6 leading-[1.08]">BidLens</h1>
+      <p class="text-lg sm:text-xl text-zinc-300 font-normal max-w-xl mx-auto mb-10 leading-relaxed tracking-tight">
+        AI-Powered Pre-Submission Proposal &amp; RFP Evaluation Engine
+      </p>
+      <div class="flex flex-col items-center gap-4 w-full sm:w-auto">
+        <button id="launch" type="button" class="group relative inline-flex items-center justify-center gap-3 px-8 py-4 bg-black hover:bg-zinc-900 text-white text-base sm:text-[17px] font-bold border border-zinc-700/80 shadow-xl active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-zinc-800 focus:ring-offset-2 rounded-full">
+          <span class="tracking-tight">Launch Evaluation</span>
+          <svg class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"/></svg>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="w-full py-6 text-center z-20 bg-transparent">
+    <p class="text-xs font-semibold tracking-tight text-zinc-600">© 2026 BidLens · Institutional Evaluation Framework</p>
+  </footer>
+
+  <script src="js/state.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    // Demo pipeline: one click signs in as the demo reviewer and goes straight through.
+    const DEMO_USER = { email: "florian.weber@bidlens.io", name: "Dr. Florian Weber", role: "Lead Presales · DACH", since: Date.now() };
+    document.getElementById("launch").addEventListener("click", () => {
+      BL.set(BL.KEYS.user, DEMO_USER);
+      location.href = "build.html";
+    });
+    // Warm the health endpoint so Build knows the mode without an extra wait.
+    API.health().catch(() => {});
+  </script>
+</body>
+</html>

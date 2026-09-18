@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BidLens — Build Evaluation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = { darkMode: "class", theme: { extend: { fontFamily: { sans: ["Inter","sans-serif"], headline: ["Plus Jakarta Sans","sans-serif"], mono: ["JetBrains Mono","monospace"] } } } }
+  </script>
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body class="bg-zinc-50 font-sans text-zinc-900 antialiased selection:bg-zinc-200 min-h-full">
+
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-zinc-200">
+    <div class="h-16 px-6 sm:px-8 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="w-7 h-7 rounded-full bg-zinc-950 text-white flex items-center justify-center font-bold text-sm font-headline shrink-0">B</a>
+        <span class="font-headline font-bold text-zinc-950 text-sm tracking-tight">BidLens</span>
+        <nav class="ml-5 hidden sm:flex items-center gap-2 text-[11px] font-mono text-zinc-400">
+          <span class="text-zinc-950 font-semibold">01 Build</span><span>/</span><span>02 Review</span>
+        </nav>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-100 text-zinc-600 text-[11px] font-medium">
+          <span id="mode-dot" class="w-1.5 h-1.5 rounded-full bg-zinc-400"></span><span id="mode-text">Checking…</span>
+        </div>
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-zinc-100 text-zinc-700 flex items-center justify-center shrink-0 border border-zinc-200"><span class="material-symbols-outlined text-[16px]">person</span></div>
+          <div class="hidden sm:flex flex-col min-w-0">
+            <span id="user-name" class="text-xs font-semibold text-zinc-950 truncate">—</span>
+            <span id="user-role" class="text-[11px] text-zinc-400 truncate">Lead Presales · DACH</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 sm:px-8 py-8 flex flex-col gap-6">
+    <div>
+      <h1 class="font-headline text-2xl font-bold text-zinc-950 tracking-tight">Build the evaluation</h1>
+      <p class="text-[13px] text-zinc-500 mt-1.5 leading-relaxed">Upload the client RFP and one or more proposal drafts. BidLens extracts requirements, calibrates the rubric to the RFP, then traces and scores every draft.</p>
+    </div>
+
+    <div id="mock-note" hidden class="flex items-start gap-3 bg-white border border-zinc-200 rounded-xl px-4 py-3 text-xs text-zinc-600 shadow-sm">
+      <span class="material-symbols-outlined text-zinc-400 text-[18px] shrink-0">info</span>
+      <div class="leading-relaxed"><strong class="text-zinc-950 font-semibold">Review Mock mode.</strong> No <code class="font-mono text-[11px] bg-zinc-100 px-1 py-0.5 rounded">GEMINI_API_KEY</code> is set, so only the four NordFrame benchmark proposals can be scored, using frozen reviews. Add a key to <code class="font-mono text-[11px] bg-zinc-100 px-1 py-0.5 rounded">.env</code> to evaluate any document live.</div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-5 items-start">
+      <!-- RFP -->
+      <section class="bg-white border border-zinc-200 rounded-xl shadow-sm flex flex-col overflow-hidden">
+        <div class="px-5 py-3 border-b border-zinc-100 flex items-center justify-between gap-2 flex-wrap">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-zinc-900 font-headline inline-flex items-center gap-2"><span class="material-symbols-outlined text-zinc-400 text-[16px]">lock</span>Baseline RFP</span>
+          <label class="h-8 px-3 inline-flex items-center gap-1.5 text-[11.5px] font-medium border border-zinc-200 rounded-md cursor-pointer hover:bg-zinc-50 text-zinc-700">
+            <span class="material-symbols-outlined text-[15px] text-zinc-500">upload_file</span>Upload
+            <input type="file" id="rfp-file" accept=".md,.txt,.pdf,.docx,.pptx" hidden />
+          </label>
+        </div>
+        <textarea id="rfp-text" class="flex-1 min-h-[280px] w-full border-0 focus:ring-0 text-[12.5px] font-mono leading-relaxed p-5 resize-y text-zinc-700" placeholder="Upload or paste the RFP / client brief here…"></textarea>
+        <div class="px-5 py-2 border-t border-zinc-100 text-[10.5px] text-zinc-400 font-mono flex items-center justify-between"><span id="rfp-name">no file</span><span><span id="rfp-count">0</span> chars</span></div>
+      </section>
+
+      <!-- Proposals -->
+      <section class="bg-white border border-zinc-200 rounded-xl shadow-sm flex flex-col overflow-hidden">
+        <div class="px-5 py-3 border-b border-zinc-100 flex items-center justify-between gap-2 flex-wrap">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-zinc-900 font-headline inline-flex items-center gap-2"><span class="material-symbols-outlined text-zinc-400 text-[16px]">description</span>Proposal Drafts <span id="prop-count-badge" class="normal-case tracking-normal font-mono text-[10px] font-medium text-zinc-500 bg-zinc-100 rounded px-1.5 py-0.5">0</span></span>
+          <label class="h-8 px-3 inline-flex items-center gap-1.5 text-[11.5px] font-medium border border-zinc-200 rounded-md cursor-pointer hover:bg-zinc-50 text-zinc-700">
+            <span class="material-symbols-outlined text-[15px] text-zinc-500">upload_file</span>Upload files
+            <input type="file" id="proposal-file" accept=".md,.txt,.pdf,.docx,.pptx" multiple hidden />
+          </label>
+        </div>
+        <div id="prop-list" class="px-5 py-3 flex flex-col gap-2 max-h-[220px] overflow-y-auto"></div>
+        <div id="prop-empty" class="px-5 py-8 text-center">
+          <span class="material-symbols-outlined text-zinc-300 text-[32px]">folder_open</span>
+          <p class="text-[12px] text-zinc-400 mt-1">No proposals yet — upload one or more files, or paste a draft below.</p>
+        </div>
+        <details class="border-t border-zinc-100">
+          <summary class="px-5 py-2.5 text-[11.5px] font-medium text-zinc-600 hover:text-zinc-900 cursor-pointer list-none flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[15px] text-zinc-400">edit_note</span>Paste a draft instead
+          </summary>
+          <div class="px-5 pb-4">
+            <textarea id="paste-text" class="w-full min-h-[120px] border border-zinc-200 rounded-md focus:ring-zinc-900/10 focus:border-zinc-400 text-[12.5px] font-mono leading-relaxed p-3 resize-y text-zinc-700" placeholder="Paste the proposal text…"></textarea>
+            <button id="btn-add-paste" type="button" class="mt-2 h-8 px-3 text-[11.5px] font-medium bg-zinc-900 hover:bg-zinc-800 text-white rounded-md inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px]">add</span>Add as proposal</button>
+          </div>
+        </details>
+      </section>
+    </div>
+
+    <!-- Criteria -->
+    <section class="bg-white border border-zinc-200 rounded-xl shadow-sm overflow-hidden">
+      <div class="px-5 py-3.5 border-b border-zinc-100 flex items-center justify-between gap-3 flex-wrap">
+        <div class="flex items-center gap-2 flex-wrap">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-zinc-900 font-headline">Rubric Criteria Weighting</h2>
+          <span id="weight-badge" class="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-900 text-white font-semibold">Total: 100%</span>
+          <span id="auto-badge" hidden class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-100 text-emerald-800 font-semibold inline-flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">auto_awesome</span>Calibrated to this RFP</span>
+          <span id="auto-busy" hidden class="text-[11px] text-zinc-500 inline-flex items-center gap-1.5"><span class="ta-typing"><i></i><i></i><i></i></span>Reading the RFP…</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btn-auto" type="button" class="px-2.5 py-1 text-[11.5px] font-medium rounded-md border border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-700 inline-flex items-center gap-1.5 transition-colors shadow-sm"><span class="material-symbols-outlined text-[14px] text-zinc-500">auto_awesome</span>Re-detect</button>
+          <button id="btn-reset" type="button" class="px-2.5 py-1 rounded text-[11.5px] font-medium text-zinc-600 hover:text-zinc-900 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 transition-colors inline-flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">restart_alt</span>Reset</button>
+        </div>
+      </div>
+      <div class="p-5">
+        <div id="criteria" class="grid grid-cols-1 md:grid-cols-2 gap-3.5"></div>
+        <div id="ai-sug" hidden class="mt-4 bg-zinc-50 border border-zinc-200 rounded-lg p-3.5 text-[11.5px] text-zinc-700"></div>
+        <div class="mt-4 pt-4 border-t border-zinc-100 flex flex-col sm:flex-row gap-2">
+          <input id="new-name" class="h-9 text-[12px] rounded-md border-zinc-200 sm:w-56" placeholder="New criterion name" />
+          <input id="new-desc" class="h-9 text-[12px] rounded-md border-zinc-200 flex-1" placeholder="What should the evaluator check?" />
+          <button id="btn-add" type="button" class="h-9 px-4 text-[12px] font-medium bg-zinc-900 hover:bg-zinc-800 text-white rounded-md inline-flex items-center gap-1.5 shrink-0"><span class="material-symbols-outlined text-[14px]">add</span>Add Criterion</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="flex items-center justify-between gap-4 flex-wrap">
+      <p class="text-[11.5px] text-zinc-500 flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px] text-zinc-400">info</span>Weights are normalised to 100%. All scores use a 1.0–5.0 scale.</p>
+      <button id="btn-analyze" disabled class="h-11 px-6 rounded-full bg-zinc-900 hover:bg-zinc-800 disabled:opacity-35 disabled:cursor-not-allowed text-white font-semibold text-[14px] inline-flex items-center gap-2 transition-colors shadow-sm">
+        <span class="label">Run Evaluation</span><span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+      </button>
+    </div>
+
+    <section id="progress" hidden class="bg-white border border-zinc-200 rounded-xl shadow-sm p-5">
+      <div class="grid sm:grid-cols-3 gap-4">
+        <div class="stage flex items-center gap-3" id="st-extract"><div class="dot">1</div><div><div class="text-[12.5px] font-semibold text-zinc-950">Extracting requirements</div><div class="text-[11px] text-zinc-500">Classifying hard constraints</div></div></div>
+        <div class="stage flex items-center gap-3" id="st-analyze"><div class="dot">2</div><div><div class="text-[12.5px] font-semibold text-zinc-950">Tracing &amp; scoring</div><div id="st-analyze-sub" class="text-[11px] text-zinc-500">Cross-referencing against the RFP</div></div></div>
+        <div class="stage flex items-center gap-3" id="st-fixes"><div class="dot">3</div><div><div class="text-[12.5px] font-semibold text-zinc-950">Preparing inline fixes</div><div class="text-[11px] text-zinc-500">Locating passages to rewrite</div></div></div>
+      </div>
+      <div class="h-1.5 bg-zinc-100 rounded-full mt-5 overflow-hidden"><div id="progress-fill" class="progress-fill h-full bg-zinc-900 rounded-full" style="width:0%"></div></div>
+    </section>
+  </main>
+
+  <script src="js/state.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/build.js"></script>
+</body>
+</html>

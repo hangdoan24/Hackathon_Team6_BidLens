@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 76" role="img" aria-label="Tender assistant character">
+  <defs>
+    <linearGradient id="taBody" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#18181b"/>
+      <stop offset="1" stop-color="#52525b"/>
+    </linearGradient>
+    <linearGradient id="taHead" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3f3f46"/>
+      <stop offset="1" stop-color="#18181b"/>
+    </linearGradient>
+  </defs>
+  <!-- body -->
+  <path d="M14 76c0-14 8-22 20-22s20 8 20 22H14z" fill="url(#taBody)"/>
+  <!-- collar -->
+  <path d="M27 54h14l-7 8z" fill="#fafafa" opacity=".92"/>
+  <!-- head -->
+  <rect x="13" y="8" width="42" height="40" rx="14" fill="url(#taHead)"/>
+  <!-- face plate -->
+  <rect x="18" y="14" width="32" height="26" rx="10" fill="#fff"/>
+  <!-- eyes -->
+  <circle cx="28" cy="25" r="2.4" fill="#18181b"/>
+  <circle cx="40" cy="25" r="2.4" fill="#18181b"/>
+  <!-- smile -->
+  <path d="M28 31.5c2.2 3 9.8 3 12 0" stroke="#18181b" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <!-- cheeks -->
+  <circle cx="23.5" cy="30" r="1.8" fill="#fda4af" opacity=".75"/>
+  <circle cx="44.5" cy="30" r="1.8" fill="#fda4af" opacity=".75"/>
+  <!-- headset band -->
+  <path d="M15 26c0-11 8-18 19-18s19 7 19 18" stroke="#09090b" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- ear cups -->
+  <rect x="10" y="22" width="7" height="12" rx="3" fill="#09090b"/>
+  <rect x="51" y="22" width="7" height="12" rx="3" fill="#09090b"/>
+  <!-- mic boom -->
+  <path d="M14 34c0 7 4 10 10 11" stroke="#09090b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <circle cx="25" cy="45.5" r="2.4" fill="#09090b"/>
+  <!-- proposal sheet -->
+  <g transform="translate(40 52) rotate(-8)">
+    <rect x="0" y="0" width="18" height="22" rx="2.5" fill="#fff" stroke="#d4d4d8"/>
+    <rect x="3" y="4" width="12" height="1.6" rx=".8" fill="#d4d4d8"/>
+    <rect x="3" y="8" width="9" height="1.6" rx=".8" fill="#d4d4d8"/>
+    <rect x="3" y="12" width="11" height="1.6" rx=".8" fill="#d4d4d8"/>
+    <circle cx="13" cy="16.5" r="4.2" fill="#fbbf24"/>
+    <path d="M10.8 16.6l1.6 1.6 3-3.2" stroke="#18181b" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <!-- hand -->
+  <circle cx="41" cy="72" r="4" fill="#fafafa"/>
+</svg>
